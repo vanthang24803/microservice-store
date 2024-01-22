@@ -56,6 +56,7 @@ namespace Product.Core.Utils
                 {
                     listProducts = listProducts.Where(i => i.Options.Any(cat => cat.Quantity == 0)).ToList();
                 }
+
             }
 
             // Price filter
@@ -74,7 +75,37 @@ namespace Product.Core.Utils
 
             // Pagination
             int skip = (query.Page - 1) * query.Limit;
-            listProducts = listProducts.OrderBy(p => p.CreateAt).Skip(skip).Take(query.Limit).ToList();
+            listProducts = listProducts.Skip(skip).Take(query.Limit).ToList();
+
+            if (!string.IsNullOrEmpty(query.Filter))
+            {
+                if (query.Filter == "Alphabet")
+                {
+                    listProducts = [.. listProducts.OrderBy(n => n.Name)];
+                }
+
+                if (query.Filter == "ReverseAlphabet")
+                {
+                    listProducts = [.. listProducts.OrderByDescending(n => n.Name)];
+                }
+                if (query.Filter == "HighToLow")
+                {
+                    listProducts = [.. listProducts.OrderByDescending(o => o.Options.Max(c => c.Price))];
+                }
+                if (query.Filter == "LowToHigh")
+                {
+                    listProducts = [.. listProducts.OrderBy(o => o.Options.Min(c => c.Price))];
+                }
+                if (query.Filter == "Lasted")
+                {
+                    listProducts = [.. listProducts.OrderByDescending(n => n.CreateAt)];
+                }
+                if (query.Filter == "Oldest")
+                {
+                    listProducts = [.. listProducts.OrderBy(n => n.CreateAt)];
+                }
+            }
+
 
             return listProducts;
         }

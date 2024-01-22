@@ -13,6 +13,8 @@ namespace Product.Core.Utils
 
         public string? SortBy { get; set; } = null;
 
+        public string? Filter { get; set; } = null;
+
         public string? Status { get; set; } = null;
 
         public int Limit { get; set; } = 20;

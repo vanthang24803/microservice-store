@@ -64,10 +64,9 @@ namespace Product.Core.Services
         public async Task<List<BookDto>> GetAsync(QueryObject query)
         {
             var listProducts = await _context.Books
-                .Include(i => i.Images.OrderBy(s => s.CreateAt))
+                .Include(i => i.Images.OrderByDescending(s => s.CreateAt))
                 .Include(c => c.Categories)
                 .Include(o => o.Options)
-                .OrderBy(c => c.CreateAt)
                 .AsQueryable()
                 .ToListAsync();
 
