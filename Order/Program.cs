@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using Order.core.Context;
+using Order.core.Interfaces;
+using Order.core.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +11,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 
