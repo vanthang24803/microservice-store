@@ -20,9 +20,9 @@ namespace Order.core.Services
             _context = context;
         }
 
-        public async Task<Response> CreateAsync(string userId, OrderDto orderDto)
+        public async Task<Response> CreateAsync(OrderDto orderDto)
         {
-            var order = MapToOrder(orderDto, userId);
+            var order = MapToOrder(orderDto);
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
 
@@ -96,7 +96,7 @@ namespace Order.core.Services
         }
 
 
-        public Models.Order MapToOrder(OrderDto orderDto, string userId)
+        public Models.Order MapToOrder(OrderDto orderDto)
         {
             return new Models.Order
             {
@@ -108,14 +108,25 @@ namespace Order.core.Services
                 Shipping = orderDto.Shipping,
                 Status = orderDto.Status,
                 TotalPrice = orderDto.TotalPrice,
-                Voucher = orderDto.Voucher,
-                UserId = userId,
+                UserId = orderDto.UserId,
                 Address = orderDto.Address,
                 CreateAt = orderDto.CreateAt,
                 NumberPhone = orderDto.NumberPhone,
+                Name = orderDto.Name,
             };
         }
 
+        public async Task<Models.Order> GetDetailAsync(string id)
+        {
+            var result = await _context.Orders.Include(p => p.Products).FirstOrDefaultAsync(p => p.Id == id);
+
+            if (result is null)
+            {
+                return null;
+            }
+
+            return result;
+        }
 
     }
 }

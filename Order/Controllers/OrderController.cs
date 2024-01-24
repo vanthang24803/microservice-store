@@ -22,10 +22,10 @@ namespace Order.Controllers
         }
 
         [HttpPost]
-        [Route("{id}/create")]
-        public async Task<IActionResult> CreateOrder([FromRoute] string id, [FromBody] OrderDto order)
+        [Route("create")]
+        public async Task<IActionResult> CreateOrder([FromBody] OrderDto order)
         {
-            var result = await _orderService.CreateAsync(id, order);
+            var result = await _orderService.CreateAsync(order);
             if (result.IsSucceed)
             {
                 return Ok(result);
@@ -35,11 +35,26 @@ namespace Order.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("{id}/user")]
 
         public async Task<IActionResult> GetOrderByUser([FromRoute] string id)
         {
             var result = await _orderService.GetAsync(id);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+
+        public async Task<IActionResult> GetDetail(string id)
+        {
+            var result = await _orderService.GetDetailAsync(id);
+
+            if (result is null)
+            {
+                return NotFound("Order not found");
+            }
+
             return Ok(result);
         }
 

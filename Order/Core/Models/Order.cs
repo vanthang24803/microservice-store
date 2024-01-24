@@ -12,7 +12,7 @@ namespace Order.core.Models
     public class Order
     {
         [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public string Id { get; set; }
         public List<Product> Products { get; set; } = [];
         public string Address { get; set; }
 
@@ -22,12 +22,12 @@ namespace Order.core.Models
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Status Status { get; set; } = Status.PENDING;
-        public string Voucher { get; set; }
         public int Quantity { get; set; }
         public double TotalPrice { get; set; }
         public string UserId { get; set; }
         public string Email { get; set; }
         public string NumberPhone { get; set; }
+        public string Name { get; set; }
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
     }
 }

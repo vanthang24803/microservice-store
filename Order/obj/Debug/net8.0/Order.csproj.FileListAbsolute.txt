@@ -112,3 +112,5 @@ D:\WorkSpace\NET\Microservice\Order\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.W
 D:\WorkSpace\NET\Microservice\Order\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\WorkSpace\NET\Microservice\Order\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\WorkSpace\NET\Microservice\Order\obj\Debug\net8.0\Order.sourcelink.json
+D:\WorkSpace\NET\Microservice\Order\bin\Debug\net8.0\package-lock.json
+D:\WorkSpace\NET\Microservice\Order\bin\Debug\net8.0\package.json

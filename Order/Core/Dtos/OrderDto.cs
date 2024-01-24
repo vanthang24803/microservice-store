@@ -10,7 +10,8 @@ namespace Order.Core.Dtos
 {
     public class OrderDto
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public string Id { get; set; }
+        public string Name { get; set; }
         public List<Product> Products { get; set; } = [];
         public string Address { get; set; }
 
@@ -20,11 +21,12 @@ namespace Order.Core.Dtos
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Status Status { get; set; } = Status.PENDING;
-        public string Voucher { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public double TotalPrice { get; set; }
         public string Email { get; set; }
         public string NumberPhone { get; set; }
+
+        public string UserId { get; set; }
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
     }
 }

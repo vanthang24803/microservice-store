@@ -12,8 +12,8 @@ using Order.core.Context;
 namespace Order.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240123140751_init")]
-    partial class init
+    [Migration("20240124151050_id")]
+    partial class id
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,9 +27,8 @@ namespace Order.Migrations
 
             modelBuilder.Entity("Order.core.Models.Order", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -39,6 +38,10 @@ namespace Order.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -65,10 +68,6 @@ namespace Order.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Voucher")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.ToTable("Orders");
@@ -76,7 +75,7 @@ namespace Order.Migrations
 
             modelBuilder.Entity("Order.core.Models.Product", b =>
                 {
-                    b.Property<string>("ProductId")
+                    b.Property<string>("Id")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -87,11 +86,15 @@ namespace Order.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("OrderId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("OrderId")
+                        .HasColumnType("text");
 
                     b.Property<int>("Price")
                         .HasColumnType("integer");
+
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
@@ -103,7 +106,7 @@ namespace Order.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("ProductId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
