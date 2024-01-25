@@ -34,11 +34,11 @@ namespace Order.core.Services
         }
 
 
-        public async Task<Response> DeleteAsync(Guid id)
+        public async Task<Response> DeleteAsync(string id)
         {
-            var exitingOrder = await _context.Orders.FindAsync(id);
+            var existingOrder = await _context.Orders.Include(o => o.Products).SingleOrDefaultAsync(o => o.Id == id);
 
-            if (exitingOrder is null)
+            if (existingOrder is null)
             {
                 return new Response()
                 {
@@ -47,13 +47,14 @@ namespace Order.core.Services
                 };
             }
 
-            _context.Orders.Remove(exitingOrder);
+            _context.Products.RemoveRange(existingOrder.Products);
+            _context.Orders.Remove(existingOrder);
             await _context.SaveChangesAsync();
 
             return new Response()
             {
                 IsSucceed = true,
-                Message = "Order deleted success"
+                Message = "Order and associated products deleted successfully"
             };
         }
 
@@ -70,7 +71,7 @@ namespace Order.core.Services
             return await _context.Orders.Include(p => p.Products).ToListAsync();
         }
 
-        public async Task<Response> UpdateAsync(Guid id, UpdateDto updateDto)
+        public async Task<Response> UpdateAsync(string id, UpdateDto updateDto)
         {
             var exitingOrder = await _context.Orders.FindAsync(id);
 

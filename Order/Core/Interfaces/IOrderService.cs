@@ -12,13 +12,13 @@ namespace Order.core.Interfaces
     {
         Task<Response> CreateAsync(OrderDto order);
 
-        Task<Response> UpdateAsync(Guid id, UpdateDto updateDto);
+        Task<Response> UpdateAsync(string id, UpdateDto updateDto);
 
         Task<List<Models.Order>> GetAsync(string id);
         Task<List<Models.Order>> GetAllAsync();
 
         Task<Models.Order> GetDetailAsync(string id);
 
-        Task<Response> DeleteAsync(Guid id);
+        Task<Response> DeleteAsync(string id);
     }
 }

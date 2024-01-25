@@ -67,8 +67,8 @@ namespace Order.Controllers
         }
 
         [HttpPut]
-        [Route("{id}/update")]
-        public async Task<IActionResult> UpdateOrder([FromRoute] Guid id, [FromBody] UpdateDto updateDto)
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateOrder([FromRoute] string id, [FromBody] UpdateDto updateDto)
         {
             var result = await _orderService.UpdateAsync(id, updateDto);
             if (result.IsSucceed)
@@ -81,7 +81,7 @@ namespace Order.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> DeleteOrder([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteOrder([FromRoute] string id)
         {
             var result = await _orderService.DeleteAsync(id);
             if (result.IsSucceed)
