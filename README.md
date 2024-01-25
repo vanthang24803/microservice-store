@@ -37,10 +37,10 @@ You must have API installed and running!
 #### Documentaion:
   <ul>
     <li>
-    <a href="../APIGateWay">API Gateway</a></li>
-    <li><a href="../Auth">Auth Service</a></li>
-    <li><a href="../Product">Product Service</a></li>
-    <li><a href="../Order">Order Service</a></li>
+    <a href="APIGateWay">API Gateway</a></li>
+    <li><a href="Auth">Auth Service</a></li>
+    <li><a href="Product">Product Service</a></li>
+    <li><a href="Order">Order Service</a></li>
   </ul>
 
 #### STEP 1 — Clone the repository
