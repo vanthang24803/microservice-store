@@ -1,1 +1,0 @@
-<h1 align="center">EXAMPLE API JWT NET 8</h1>
