@@ -46,7 +46,7 @@ You must have API installed and running!
 #### STEP 1 — Clone the repository
 
 ```sh
-git clone[ https://github.com/open-source-labs/Docketeer.git](https://github.com/vanthang24803/microservice-store.git)
+git clone https://github.com/vanthang24803/microservice-store.git
 ```
 
 #### STEP 2 — Docker compose up
