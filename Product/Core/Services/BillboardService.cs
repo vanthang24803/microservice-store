@@ -80,6 +80,19 @@ namespace Product.Core.Services
             return await _context.Billboards.ToListAsync();
         }
 
+        public async Task<Billboard?> GetDetailAsync(Guid id)
+        {
+            var exitingBillboard = await _context.Billboards.FindAsync(id);
+
+            if (exitingBillboard is null)
+            {
+                return null;
+            }
+
+            return exitingBillboard;
+
+        }
+
         public async Task<ResponseDto> UpdateAsync(Guid id, UpdateBillboard updateBillboard, IFormFile file)
         {
             var exitingBillboard = await _context.Billboards.FindAsync(id);

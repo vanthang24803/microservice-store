@@ -18,6 +18,7 @@ namespace Product.Core.Services
     {
         private readonly ApplicationDbContext _context;
 
+
         public BookService(ApplicationDbContext context)
         {
             _context = context;
@@ -26,6 +27,31 @@ namespace Product.Core.Services
         public async Task<ResponseDto> CreateAsync(CreateBookDto createBookDto)
         {
             var result = MapFromDto(createBookDto);
+
+            var existingCategory = await _context.Categories.FindAsync(Guid.Parse(createBookDto.Category));
+
+            if (existingCategory is null)
+            {
+                return new ResponseDto()
+                {
+                    IsSucceed = false,
+                    Message = "Category not found"
+                };
+            }
+
+            result.Categories.Add(existingCategory);
+
+            await _context.SaveChangesAsync();
+
+
+            if (existingCategory is null)
+            {
+                return new ResponseDto()
+                {
+                    IsSucceed = false,
+                    Message = "Category not found"
+                };
+            }
 
             await _context.Books.AddAsync(result);
 
@@ -51,6 +77,8 @@ namespace Product.Core.Services
                 };
             }
 
+            _context.Options.RemoveRange(existingProduct.Options);
+            _context.Images.RemoveRange(existingProduct.Images);
             _context.Remove(existingProduct);
             await _context.SaveChangesAsync();
 
@@ -133,6 +161,17 @@ namespace Product.Core.Services
             {
                 Name = createBookDto.Name,
                 Brand = createBookDto.Brand,
+                Options = createBookDto.Options.Select(o => new Options
+                {
+                    Id = o.Id,
+                    Name = o.Name,
+                    Price = o.Price,
+                    Sale = o.Sale,
+                    Status = o.Status,
+                    Quantity = o.Quantity,
+                    CreateAt = o.CreateAt,
+                    UpdateAt = o.UpdateAt,
+                }).ToList(),
                 Thumbnail = createBookDto.Thumbnail,
                 CreateAt = createBookDto.CreateAt,
                 UpdateAt = createBookDto.UpdateAt

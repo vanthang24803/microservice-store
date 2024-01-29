@@ -15,6 +15,8 @@ namespace Product.Core.Interfaces
 
         public Task<List<Options>?> GetAsync(Guid productId);
 
+        public Task<Options?> GetDetailAsync(Guid productId, Guid id);
+
         public Task<ResponseDto> DeleteAsync(Guid productId, Guid id);
     }
 }

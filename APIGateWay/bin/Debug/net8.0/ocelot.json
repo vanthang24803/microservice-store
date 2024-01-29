@@ -37,6 +37,18 @@
       "UpstreamHttpMethod": ["GET", "PUT", "DELETE"]
     },
     {
+      "DownstreamPathTemplate": "/api/product/{id}/category/{categoryId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 6002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product/{id}/category/{categoryId}",
+      "UpstreamHttpMethod": ["POST"]
+    },
+    {
       "DownstreamPathTemplate": "/api/product/billboard",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

@@ -93,5 +93,25 @@ namespace Product.Controllers
 
             return BadRequest(result);
         }
+
+        [HttpGet]
+        [Route("{id}/option/{optionId}")]
+
+        public async Task<IActionResult> GetDetailOption([FromRoute] Guid id, [FromRoute] Guid optionId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _optionsService.GetDetailAsync(id, optionId);
+
+            if (result is null)
+            {
+                return NotFound("Option not found");
+            }
+
+            return Ok(result);
+        }
     }
 }

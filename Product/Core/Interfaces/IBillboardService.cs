@@ -15,6 +15,8 @@ namespace Product.Core.Interfaces
 
         Task<List<Billboard>> GetAsync();
 
+        Task<Billboard?> GetDetailAsync(Guid id);
+
         Task<ResponseDto> DeleteAsync(Guid id);
     }
 }

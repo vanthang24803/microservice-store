@@ -13,6 +13,8 @@ namespace Product.Core.Interfaces
 
         public Task<ResponseDto> UpdateAsync(Guid id, UpdateCategoryDto updateCategoryDto);
 
+        public Task<Category?> GetDetailAsync(Guid id);
+
         public Task<List<Category>> GetAsync();
 
         public Task<ResponseDto> DeleteAsync(Guid id);

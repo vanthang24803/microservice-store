@@ -115,6 +115,16 @@ namespace Product.Core.Services
             };
         }
 
+        public async Task<Category?> GetDetailAsync(Guid id)
+        {
+            var category = await _context.Categories.FindAsync(id);
 
+            if (category is null)
+            {
+                return null;
+            }
+
+            return category;
+        }
     }
 }

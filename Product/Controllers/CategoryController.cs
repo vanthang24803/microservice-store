@@ -70,6 +70,25 @@ namespace Product.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("{id}")]
+
+        public async Task<IActionResult> GetDetailCategory([FromRoute] Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _categoryService.GetDetailAsync(id);
+
+            if (result is null)
+            {
+                return NotFound("Category not found");
+            }
+            return Ok(result);
+        }
+
 
         [HttpPut]
         [Route("{id}")]
@@ -88,6 +107,6 @@ namespace Product.Controllers
             }
 
             return BadRequest(result);
-        }    
+        }
     }
 }

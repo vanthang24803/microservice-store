@@ -93,5 +93,26 @@ namespace Product.Controllers
             return BadRequest(result);
         }
 
+
+        [HttpGet]
+        [Route("{id}")]
+
+        public async Task<IActionResult> GetDetailBillboard([FromRoute] Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _billboardService.GetDetailAsync(id);
+
+            if (result is null)
+            {
+                return NotFound("Billboard not found");
+            }
+
+            return Ok(result);
+
+        }
     }
 }

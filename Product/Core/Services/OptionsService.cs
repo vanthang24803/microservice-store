@@ -147,5 +147,25 @@ namespace Product.Core.Services
                 BookId = id,
             };
         }
+
+        public async Task<Options?> GetDetailAsync(Guid productId, Guid id)
+        {
+            var existingProduct = await _context.Books.FindAsync(productId);
+
+            if (existingProduct is null)
+            {
+                return null;
+            }
+
+            var existingOption = await _context.Options.FindAsync(id);
+
+            if (existingOption is null)
+            {
+                return null;
+            }
+
+            return existingOption;
+
+        }
     }
 }
