@@ -12,8 +12,8 @@ using Order.core.Context;
 namespace Order.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240124151050_id")]
-    partial class id
+    [Migration("20240205004306_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

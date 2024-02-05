@@ -10,11 +10,11 @@
         "projectUniqueName": "D:\\WorkSpace\\NET\\Microservice\\APIGateWay\\APIGateWay.csproj",
         "projectName": "APIGateWay",
         "projectPath": "D:\\WorkSpace\\NET\\Microservice\\APIGateWay\\APIGateWay.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
         "outputPath": "D:\\WorkSpace\\NET\\Microservice\\APIGateWay\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"

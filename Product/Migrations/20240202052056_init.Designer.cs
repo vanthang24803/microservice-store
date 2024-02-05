@@ -12,8 +12,8 @@ using Product.Context;
 namespace Product.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240115081519_add-infomation")]
-    partial class addinfomation
+    [Migration("20240202052056_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,6 +79,10 @@ namespace Product.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Thumbnail")
                         .IsRequired()
                         .HasColumnType("text");
 

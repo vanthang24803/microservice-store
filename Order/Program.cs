@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Order.core.Context;
 using Order.core.Interfaces;
 using Order.core.Services;
+using Order.Core.Interfaces;
+using Order.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IStatistical, Statistical>();
 
 var app = builder.Build();
 
