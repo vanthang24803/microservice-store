@@ -120,10 +120,18 @@ namespace Product.Core.Services
                 };
             }
 
+            if (updateOptionsDto.Quantity > 0)
+            {
+                existingOption.Status = true;
+            }
+            else
+            {
+                existingOption.Status = false;
+            }
+
             existingOption.Name = updateOptionsDto.Name;
             existingOption.Sale = updateOptionsDto.Sale;
             existingOption.Price = updateOptionsDto.Price;
-            existingOption.Status = updateOptionsDto.Status;
             existingOption.Quantity = updateOptionsDto.Quantity;
             existingOption.UpdateAt = DateTime.UtcNow;
 

@@ -14,9 +14,9 @@ namespace Product.Core.Utils
         {
             priceLevels = new Dictionary<string, (int, int?)>
         {
-            { "Max", (500000, null) },
-            { "Highest", (350000, 500000) },
-            { "High", (200000, 350000) },
+            { "Max", (400000, null) },
+            { "Highest", (300000, 400000) },
+            { "High", (200000, 300000) },
             { "Medium", (100000, 200000) },
             { "Low", (0, 100000) }
         };

@@ -100,7 +100,7 @@ namespace Product.Controllers
             }
 
             var result = await _bookService.DeleteAsync(id);
-            
+
             if (result.IsSucceed)
             {
                 return Ok(result);
@@ -146,6 +146,14 @@ namespace Product.Controllers
             }
 
             return BadRequest(result);
-        }        
+        }
+
+        [HttpGet]
+        [Route("total")]
+        public async Task<IActionResult> GetTotalProduct()
+        {
+            var result = await _bookService.GetTotalProduct();
+            return Ok(result);
+        }
     }
 }

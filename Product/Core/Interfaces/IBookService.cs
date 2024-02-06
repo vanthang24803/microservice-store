@@ -19,5 +19,7 @@ namespace Product.Core.Interfaces
         public Task<List<BookDto>> GetAsync(QueryObject query);
 
         public Task<Book?> GetDetailAsync(Guid id);
+
+        public Task<double> GetTotalProduct();
     }
 }

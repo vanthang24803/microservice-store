@@ -114,3 +114,10 @@ D:\WorkSpace\NET\Microservice\Product\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAna
 D:\WorkSpace\NET\Microservice\Product\bin\Debug\net8.0\Newtonsoft.Json.dll
 D:\WorkSpace\NET\Microservice\Product\bin\Debug\net8.0\CloudinaryDotNet.dll
 D:\WorkSpace\NET\Microservice\Product\obj\Debug\net8.0\Product.sourcelink.json
+D:\WorkSpace\NET\Microservice\Product\bin\Debug\net8.0\ClosedXML.dll
+D:\WorkSpace\NET\Microservice\Product\bin\Debug\net8.0\DocumentFormat.OpenXml.dll
+D:\WorkSpace\NET\Microservice\Product\bin\Debug\net8.0\ExcelNumberFormat.dll
+D:\WorkSpace\NET\Microservice\Product\bin\Debug\net8.0\Irony.dll
+D:\WorkSpace\NET\Microservice\Product\bin\Debug\net8.0\SixLabors.Fonts.dll
+D:\WorkSpace\NET\Microservice\Product\bin\Debug\net8.0\System.IO.Packaging.dll
+D:\WorkSpace\NET\Microservice\Product\bin\Debug\net8.0\XLParser.dll

@@ -215,5 +215,14 @@ namespace Product.Core.Services
                 UpdateAt = product.UpdateAt,
             };
         }
+
+        public async Task<double> GetTotalProduct()
+        {
+            var totalQuantity = await _context.Books
+                            .SelectMany(b => b.Options)
+                            .SumAsync(o => o.Quantity);
+
+            return totalQuantity;
+        }
     }
 }

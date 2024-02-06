@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using ClosedXML.Excel;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Order.core.Context;
 using Order.core.Dtos;
@@ -117,7 +120,7 @@ namespace Order.core.Services
             };
         }
 
-        public async Task<Models.Order> GetDetailAsync(string id)
+        public async Task<Models.Order?> GetDetailAsync(string id)
         {
             var result = await _context.Orders.Include(p => p.Products).FirstOrDefaultAsync(p => p.Id == id);
 
@@ -130,4 +133,5 @@ namespace Order.core.Services
         }
 
     }
+
 }
