@@ -8,7 +8,7 @@ namespace Product.Core.Interfaces
 {
     public interface IPhotoService
     {
-        public Task<ResponseDto> CreateAsync(Guid productId, IFormFile file);
+        public Task<ResponseDto> CreateAsync(Guid productId, List<IFormFile> files);
 
         public Task<List<Image>?> GetAsync(Guid productId);
 

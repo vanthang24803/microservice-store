@@ -20,15 +20,14 @@ namespace Product.Controllers
 
         [HttpPost]
         [Route("{id}/image")]
-
-        public async Task<IActionResult> CreateImage([FromRoute] Guid id, IFormFile file)
+        public async Task<IActionResult> CreateImages([FromRoute] Guid id, List<IFormFile> files)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _photoService.CreateAsync(id, file);
+            var result = await _photoService.CreateAsync(id, files);
 
             if (result.IsSucceed)
             {

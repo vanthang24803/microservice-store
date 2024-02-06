@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using CloudinaryDotNet.Actions;
+using DocumentFormat.OpenXml.Office.CustomUI;
 using Microsoft.EntityFrameworkCore;
 using Product.Context;
 using Product.Core.Interfaces;
@@ -21,7 +24,7 @@ namespace Product.Core.Services
             _upload = upload;
         }
 
-        public async Task<ResponseDto> CreateAsync(Guid productId, IFormFile file)
+        public async Task<ResponseDto> CreateAsync(Guid productId, List<IFormFile> files)
         {
             var existingProduct = await _context.Books.FindAsync(productId);
 
@@ -34,26 +37,40 @@ namespace Product.Core.Services
                 };
             }
 
-            var result = await _upload.AddPhotoAsync(file);
-
-            if (result.Error != null)
+            if (files.Count == 0)
             {
                 return new ResponseDto()
                 {
                     IsSucceed = false,
-                    Message = result.Error.Message
+                    Message = "No files to upload"
                 };
             }
 
-            var image = new Image
+
+            foreach (var file in files)
             {
-                Url = result.SecureUrl.AbsoluteUri,
-                BookId = productId,
-            };
 
-            await _context.Images.AddAsync(image);
+                var result = await _upload.AddPhotoAsync(file);
 
-            existingProduct.Images.Add(image);
+                if (result.Error != null)
+                {
+                    return new ResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = result.Error.Message
+                    };
+                }
+
+                var image = new Image
+                {
+                    Url = result.SecureUrl.AbsoluteUri,
+                    BookId = productId,
+                };
+
+                await _context.Images.AddAsync(image);
+
+                existingProduct.Images.Add(image);
+            }
 
             await _context.SaveChangesAsync();
 
@@ -63,6 +80,7 @@ namespace Product.Core.Services
                 Message = "Image upload successfully!"
             };
         }
+
 
         public async Task<ResponseDto> DeleteAsync(Guid productId, Guid id)
         {
