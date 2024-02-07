@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Product.Context;
 using Product.Core.Dtos.Voucher;
 using Product.Core.Interfaces;
+using Product.Core.Mapper;
 using Product.Core.Models;
 using Product.Core.Utils;
 
@@ -41,20 +42,9 @@ namespace Product.Core.Services
 
         public async Task<ResponseDto> CreateAsync(CreateVoucher createVoucher)
         {
-            var Voucher = new Voucher
-            {
-                Name = createVoucher.Name,
-                Title = createVoucher.Title,
-                Code = RandomCode.Generate(),
-                Quantity = createVoucher.Quantity,
-                Day = createVoucher.Day,
-                ShelfLife = createVoucher.CreateAt.AddDays(createVoucher.Day),
-                CreateAt = createVoucher.CreateAt,
-                UpdateAt = createVoucher.UpdateAt,
-            };
+            var Voucher = VoucherMapper.MapFromDto(createVoucher);
 
             _context.Vouchers.Add(Voucher);
-
             await _context.SaveChangesAsync();
 
             return new ResponseDto()

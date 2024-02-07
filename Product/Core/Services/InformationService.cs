@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Product.Context;
 using Product.Core.Dtos.Information;
 using Product.Core.Interfaces;
+using Product.Core.Mapper;
 using Product.Core.Models;
 
 namespace Product.Core.Services
@@ -32,22 +33,7 @@ namespace Product.Core.Services
                 };
             }
 
-            var newInformation = new Information
-            {
-                Gift = createInformation.Gift,
-                ISBN = createInformation.ISBN,
-                Price = createInformation.Price,
-                Format = createInformation.Format,
-                Author = createInformation.Author,
-                Company = createInformation.Company,
-                Category = createInformation.Category,
-                Released = createInformation.Released,
-                Introduce = createInformation.Introduce,
-                Publisher = createInformation.Publisher,
-                Translator = createInformation.Translator,
-                NumberOfPage = createInformation.NumberOfPage,
-                BookId = productId,
-            };
+            var newInformation = InformationMapper.MapFromCreate(createInformation, productId);
 
             _context.Information.Add(newInformation);
 

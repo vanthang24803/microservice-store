@@ -42,7 +42,8 @@ namespace Product.Core.Dtos.Information
         [Required(ErrorMessage = "Released is required")]
         public string Released { get; set; }
 
-        [Required(ErrorMessage = "Author is required")]
+        [Required(ErrorMessage = "Introduce is required")]
         public string Introduce { get; set; }
+
     }
 }

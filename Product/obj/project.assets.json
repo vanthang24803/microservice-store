@@ -7974,11 +7974,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\WorkSpace\\NET\\Microservice\\Product\\Product.csproj",
+      "projectUniqueName": "D:\\WorkSpace\\NET\\Microservice\\Product\\Product.csproj",
       "projectName": "Product",
-      "projectPath": "d:\\WorkSpace\\NET\\Microservice\\Product\\Product.csproj",
+      "projectPath": "D:\\WorkSpace\\NET\\Microservice\\Product\\Product.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "d:\\WorkSpace\\NET\\Microservice\\Product\\obj\\",
+      "outputPath": "D:\\WorkSpace\\NET\\Microservice\\Product\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -9,6 +9,7 @@ using Product.Core.Dtos.Category;
 using Product.Core.Dtos.Image;
 using Product.Core.Dtos.Option;
 using Product.Core.Interfaces;
+using Product.Core.Mapper;
 using Product.Core.Models;
 using Product.Core.Utils;
 
@@ -18,7 +19,6 @@ namespace Product.Core.Services
     {
         private readonly ApplicationDbContext _context;
 
-
         public BookService(ApplicationDbContext context)
         {
             _context = context;
@@ -26,7 +26,7 @@ namespace Product.Core.Services
 
         public async Task<ResponseDto> CreateAsync(CreateBookDto createBookDto)
         {
-            var result = MapFromDto(createBookDto);
+            var result = BookMapper.MapFromDto(createBookDto);
 
             var existingCategory = await _context.Categories.FindAsync(Guid.Parse(createBookDto.Category));
 
@@ -102,7 +102,7 @@ namespace Product.Core.Services
             var filter = new ProductFilter();
             listProducts = filter.ApplyFilters(listProducts, query);
 
-            var response = listProducts.Select(product => MapToDto(product)).ToList();
+            var response = listProducts.Select(product => BookMapper.MapToDto(product)).ToList();
 
             return response;
 
@@ -161,70 +161,6 @@ namespace Product.Core.Services
                             .SumAsync(o => o.Quantity);
 
             return totalQuantity;
-        }
-
-
-        public Book MapFromDto(CreateBookDto createBookDto)
-        {
-            return new Book
-            {
-                Name = createBookDto.Name,
-                Brand = createBookDto.Brand,
-                Options = createBookDto.Options.Select(o => new Options
-                {
-                    Id = o.Id,
-                    Name = o.Name,
-                    Price = o.Price,
-                    Sale = o.Sale,
-                    Status = o.Status,
-                    Quantity = o.Quantity,
-                    CreateAt = o.CreateAt,
-                    UpdateAt = o.UpdateAt,
-                }).ToList(),
-                Thumbnail = createBookDto.Thumbnail,
-                CreateAt = createBookDto.CreateAt,
-                UpdateAt = createBookDto.UpdateAt
-            };
-        }
-
-        public BookDto MapToDto(Book product)
-        {
-            return new BookDto
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Brand = product.Brand,
-                Thumbnail = product.Thumbnail,
-                Categories = product.Categories.Select(c => new CategoryDto
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    CreateAt = c.CreateAt,
-                    UpdateAt = c.UpdateAt,
-                }).ToList(),
-                Images = product.Images.Select(i => new ImageDto
-                {
-                    Id = i.Id,
-                    Url = i.Url,
-                    CreateAt = i.CreateAt,
-                    UpdateAt = i.UpdateAt,
-                }).ToList(),
-                Options = product.Options.Select(o => new OptionDto
-                {
-                    Id = o.Id,
-                    Name = o.Name,
-                    Price = o.Price,
-                    Sale = o.Sale,
-                    Status = o.Status,
-                    Quantity = o.Quantity,
-                    CreateAt = o.CreateAt,
-                    UpdateAt = o.UpdateAt,
-                }).ToList(),
-                CreateAt = product.CreateAt,
-                UpdateAt = product.UpdateAt,
-            };
-        }
-
-
+        }       
     }
 }

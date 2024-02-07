@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Product.Context;
 using Product.Core.Dtos.Category;
 using Product.Core.Interfaces;
+using Product.Core.Mapper;
 using Product.Core.Models;
 
 namespace Product.Core.Services
@@ -31,7 +32,7 @@ namespace Product.Core.Services
                     Message = "Category already exist"
                 };
             }
-            var result = MapFromDto(categoryDto);
+            var result = CategoryMapper.MapFromDto(categoryDto);
 
             await _context.Categories.AddAsync(result);
             await _context.SaveChangesAsync();
@@ -94,25 +95,6 @@ namespace Product.Core.Services
                 Message = "Category updated successfully",
             };
 
-        }
-
-        public Category MapFromDto(CreateCategoryDto categoryDto)
-        {
-            return new Category
-            {
-                Name = categoryDto.Name,
-                CreateAt = categoryDto.CreateAt,
-                UpdateAt = categoryDto.UpdateAt
-            };
-        }
-
-        public Category MapFromUpdateDto(CreateCategoryDto categoryDto)
-        {
-            return new Category
-            {
-                Name = categoryDto.Name,
-                UpdateAt = categoryDto.UpdateAt
-            };
         }
 
         public async Task<Category?> GetDetailAsync(Guid id)

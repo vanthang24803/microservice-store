@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Product.Context;
 using Product.Core.Dtos.Option;
 using Product.Core.Interfaces;
+using Product.Core.Mapper;
 using Product.Core.Models;
 
 namespace Product.Core.Services
@@ -32,7 +33,7 @@ namespace Product.Core.Services
                 };
             }
 
-            var result = MapFromDto(createOptionsDto, productId);
+            var result = OptionMapper.MapFromDto(createOptionsDto, productId);
 
             await _context.Options.AddAsync(result);
 
@@ -144,17 +145,7 @@ namespace Product.Core.Services
             };
         }
 
-        public Options MapFromDto(CreateOptionsDto createOptionsDto, Guid id)
-        {
-            return new Options
-            {
-                Name = createOptionsDto.Name,
-                Sale = createOptionsDto.Sale,
-                Price = createOptionsDto.Price,
-                Quantity = createOptionsDto.Quantity,
-                BookId = id,
-            };
-        }
+
 
         public async Task<Options?> GetDetailAsync(Guid productId, Guid id)
         {
