@@ -11,6 +11,7 @@ namespace Order.core.Models
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string ProductId { get; set; }
+        public string OptionId { get; set; }
         public string Name { get; set; }
         public string Thumbnail { get; set; }
         public string Option { get; set; }

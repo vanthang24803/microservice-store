@@ -65,13 +65,16 @@ namespace Order.core.Services
         {
             var result = await _context.Orders.Where(c => c.UserId == UserId).Include(c => c.Products).ToListAsync();
 
-            return result;
+
+            return [.. result.OrderByDescending(c => c.CreateAt)];
         }
 
 
         public async Task<List<Models.Order>> GetAllAsync()
         {
-            return await _context.Orders.Include(p => p.Products).ToListAsync();
+            var result = await _context.Orders.Include(p => p.Products).ToListAsync();
+
+            return [.. result.OrderByDescending(c => c.CreateAt)];
         }
 
         public async Task<Response> UpdateAsync(string id, UpdateDto updateDto)
