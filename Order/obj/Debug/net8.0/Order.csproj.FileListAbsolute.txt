@@ -119,3 +119,6 @@ D:\WorkSpace\NET\Microservice\Order\bin\Debug\net8.0\Irony.dll
 D:\WorkSpace\NET\Microservice\Order\bin\Debug\net8.0\SixLabors.Fonts.dll
 D:\WorkSpace\NET\Microservice\Order\bin\Debug\net8.0\System.IO.Packaging.dll
 D:\WorkSpace\NET\Microservice\Order\bin\Debug\net8.0\XLParser.dll
+D:\WorkSpace\NET\Microservice\Order\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+D:\WorkSpace\NET\Microservice\Order\bin\Debug\net8.0\MailKit.dll
+D:\WorkSpace\NET\Microservice\Order\bin\Debug\net8.0\MimeKit.dll

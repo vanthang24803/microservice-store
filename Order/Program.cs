@@ -4,6 +4,7 @@ using Order.core.Interfaces;
 using Order.core.Services;
 using Order.Core.Interfaces;
 using Order.Core.Services;
+using Order.Core.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,9 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IStatistical, Statistical>();
+builder.Services.AddScoped<IGmailService, GmailService>();
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 var app = builder.Build();
 

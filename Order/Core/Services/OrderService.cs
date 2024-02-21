@@ -11,6 +11,8 @@ using Order.core.Dtos;
 using Order.core.Enum;
 using Order.core.Interfaces;
 using Order.Core.Dtos;
+using Order.Core.Interfaces;
+using Order.Core.Utils;
 
 namespace Order.core.Services
 {
@@ -18,9 +20,13 @@ namespace Order.core.Services
     {
         private readonly ApplicationDbContext _context;
 
-        public OrderService(ApplicationDbContext context)
+        private readonly IGmailService _gmailService;
+
+
+        public OrderService(ApplicationDbContext context, IGmailService gmailService)
         {
             _context = context;
+            _gmailService = gmailService;
         }
 
         public async Task<Response> CreateAsync(OrderDto orderDto)
@@ -29,11 +35,32 @@ namespace Order.core.Services
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
 
-            return new Response()
+            try
             {
-                IsSucceed = true,
-                Message = "Order created successfully"
-            };
+                MailRequest mailRequest = new()
+                {
+                    ToEmail = orderDto.Email,
+                    Subject = "Order confirmation",
+                    Message = MailSend.OrderMailSend(order)
+                };
+                await _gmailService.SendEmailAsync(mailRequest);
+
+                return new Response()
+                {
+                    IsSucceed = true,
+                    Message = "Order created successfully"
+                };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new Response()
+                {
+                    IsSucceed = false,
+                    Message = "Mail Send Wrong!"
+                };
+            }
         }
 
 
@@ -94,12 +121,33 @@ namespace Order.core.Services
 
             await _context.SaveChangesAsync();
 
-            return new Response()
-            {
-                IsSucceed = true,
-                Message = "Order status updated success"
-            };
 
+            try
+            {
+                MailRequest mailRequest = new()
+                {
+                    ToEmail = exitingOrder.Email,
+                    Subject = $"Order {exitingOrder.Id} Update",
+                    Message = MailSend.OrderMailSend(exitingOrder)
+                };
+                await _gmailService.SendEmailAsync(mailRequest);
+
+                return new Response()
+                {
+                    IsSucceed = true,
+                    Message = "Order status updated success"
+                };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new Response()
+                {
+                    IsSucceed = false,
+                    Message = "Mail Send Wrong!"
+                };
+            }
         }
 
 
