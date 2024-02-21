@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MailKit;
+using Auth.Core.interfaces;
+using Auth.Core.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Order.Core.Interfaces;
-using Order.Core.Utils;
 
-namespace Order.Controllers
+namespace Auth.Controllers
 {
     [ApiController]
     [Route("api/test")]
@@ -42,6 +41,5 @@ namespace Order.Controllers
                 return BadRequest("Something went wrong!");
             }
         }
-
     }
 }

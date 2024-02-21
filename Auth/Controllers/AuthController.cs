@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Auth.Core.Constant;
 using Auth.Core.Dtos;
 using Auth.Core.interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auth.Controllers
@@ -22,7 +17,6 @@ namespace Auth.Controllers
             _authService = authService;
         }
 
-        // Route For Seeding my roles to DB
         [HttpPost]
         [Route("seed-roles")]
         public async Task<IActionResult> SeedRoles()
@@ -44,6 +38,68 @@ namespace Auth.Controllers
                 return Ok(registerResult);
 
             return BadRequest(registerResult);
+        }
+
+        [HttpGet]
+        [Route("verify-account")]
+
+        public async Task<IActionResult> VerifyEmail(
+             [FromQuery] string userId, [FromQuery] string token)
+
+        {
+            var message = await _authService.VerifyAccountAsync(userId, token);
+
+            if (message == "Account not found" || message == "Account verification failed.")
+            {
+                return BadRequest(message);
+            }
+
+            return Ok(message);
+        }
+
+        [HttpPost]
+        [Route("forgot-password")]
+
+        public async Task<IActionResult> ForgotPassword(
+            [FromBody] ForgotPasswordDto forgot
+        )
+        {
+            var message = await _authService.ForgotPasswordAsync(forgot.Email);
+
+            if (message == "Account not found")
+            {
+                return NotFound(message);
+            }
+
+            if (message == "Password reset failed.")
+            {
+                return BadRequest(message);
+            }
+
+            return Ok(message);
+        }
+
+        [HttpPost]
+        [Route("reset-password")]
+
+        public async Task<IActionResult> ResetPassword(
+            [FromQuery] string userId, [FromQuery] string token, [FromBody] ResetPasswordDto resetPassword
+        )
+        {
+            var message = await _authService.ResetPasswordAsync(userId, token, resetPassword.NewPassword);
+
+            if (message == "Account not found")
+            {
+                return NotFound(message);
+            }
+
+            if (message == "Password reset failed.")
+            {
+                return BadRequest(message);
+            }
+
+            return Ok(message);
+
         }
 
 

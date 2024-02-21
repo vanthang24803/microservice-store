@@ -13,5 +13,11 @@ namespace Auth.Core.interfaces
         Task<AuthServiceResponseDto> LoginAsync(LoginDto loginDto);
         Task<AuthServiceResponseDto> MakeAdminAsync(UpdatePermissionDto updatePermissionDto);
         Task<AuthServiceResponseDto> MakeOwnerAsync(UpdatePermissionDto updatePermissionDto);
+
+        Task<string> VerifyAccountAsync(string userId, string token);
+
+        Task<string> ForgotPasswordAsync(string email);
+
+        Task<string> ResetPasswordAsync(string userId , string token , string newPassword);
     }
 }

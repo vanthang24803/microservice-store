@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using Auth.Core.Constant;
 using Auth.Core.Dtos;
 using Auth.Core.interfaces;
 using Auth.Core.Models;
+using Auth.Core.Utils;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Options;
 
 namespace Auth.Core.Services
 {
@@ -20,12 +15,22 @@ namespace Auth.Core.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        private readonly IGmailService _gmailService;
+
+        private readonly TokenUtils tokenUtils;
+
+        private readonly Client _client;
+
+        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IGmailService gmailService, IOptions<Client> clientOptions)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _gmailService = gmailService;
+            _client = clientOptions.Value;
+            tokenUtils = new TokenUtils(_configuration);
         }
+
 
         public async Task<AuthServiceResponseDto> LoginAsync(LoginDto loginDto)
         {
@@ -68,7 +73,7 @@ namespace Auth.Core.Services
                 authClaims.Add(new Claim("Role", userRole));
             }
 
-            var token = GenerateNewJsonWebToken(authClaims);
+            var token = tokenUtils.GenerateNewJsonWebToken(authClaims);
 
             return new AuthServiceResponseDto()
             {
@@ -122,7 +127,6 @@ namespace Auth.Core.Services
                     Message = "UserName Already Exists"
                 };
 
-
             ApplicationUser newUser = new ApplicationUser()
             {
                 FirstName = registerDto.FirstName,
@@ -150,14 +154,113 @@ namespace Auth.Core.Services
                 };
             }
 
-            // Add a Default USER Role to all users
             await _userManager.AddToRoleAsync(newUser, StaticUserRole.USER);
 
-            return new AuthServiceResponseDto()
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+
+            try
             {
-                IsSucceed = true,
-                Message = "User Created Successfully"
-            };
+                MailRequest mailRequest = new()
+                {
+                    ToEmail = registerDto.Email,
+                    Subject = "Verify account",
+                    Message = "<a href='" + _client.Url + "/verify-account?userId=" + newUser.Id + "&token=" + token
+                    + "' target='_blank'>Click here to verify your account</a>"
+
+                };
+                await _gmailService.SendEmailAsync(mailRequest);
+
+                return new AuthServiceResponseDto()
+                {
+                    IsSucceed = true,
+                    Message = "User Created Successfully"
+                };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new AuthServiceResponseDto()
+                {
+                    IsSucceed = false,
+                    Message = "Mail Send Error"
+                };
+            }
+        }
+
+        public async Task<string> ForgotPasswordAsync(string email)
+        {
+            var isExistsUser = await _userManager.FindByEmailAsync(email);
+
+            if (isExistsUser == null)
+            {
+                return "Email not found";
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(isExistsUser);
+
+            try
+            {
+                MailRequest mailRequest = new()
+                {
+                    ToEmail = email,
+                    Subject = "Reset password",
+                    Message = "<a href='" + _client.Url + "/rest-password?userId=" + isExistsUser.Id + "&token=" + token
+                    + "' target='_blank'>Click here to reset password</a>"
+
+                };
+                await _gmailService.SendEmailAsync(mailRequest);
+
+                return "Token Send Success";
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return "Mail Send Error";
+            }
+
+        }
+
+
+        public async Task<string> ResetPasswordAsync(string userId, string token, string newPassword)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return "Account not found";
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+            if (result.Succeeded)
+            {
+                return "Password reset successfully";
+            }
+
+            return "Password reset failed.";
+        }
+
+
+        public async Task<string> VerifyAccountAsync(string userId, string token)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return "Account not found";
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+
+            if (result.Succeeded)
+            {
+                return "Account verified successfully";
+            }
+
+            return "Account verification failed.";
         }
 
         public async Task<AuthServiceResponseDto> SeedRolesAsync()
@@ -182,23 +285,6 @@ namespace Auth.Core.Services
                 IsSucceed = true,
                 Message = "Role Seeding Done Successfully"
             };
-        }
-
-        private string GenerateNewJsonWebToken(List<Claim> claims)
-        {
-            var authSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-            var tokenObject = new JwtSecurityToken(
-                    issuer: _configuration["JWT:ValidIssuer"],
-                    audience: _configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddHours(1),
-                    claims: claims,
-                    signingCredentials: new SigningCredentials(authSecret, SecurityAlgorithms.HmacSha256)
-                );
-
-            string token = new JwtSecurityTokenHandler().WriteToken(tokenObject);
-
-            return token;
         }
     }
 

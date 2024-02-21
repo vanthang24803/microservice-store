@@ -40,7 +40,7 @@ namespace Order.core.Services
                 MailRequest mailRequest = new()
                 {
                     ToEmail = orderDto.Email,
-                    Subject = "Order confirmation",
+                    Subject = "Xác nhận đơn hàng",
                     Message = MailSend.OrderMailSend(order)
                 };
                 await _gmailService.SendEmailAsync(mailRequest);
@@ -106,7 +106,9 @@ namespace Order.core.Services
 
         public async Task<Response> UpdateAsync(string id, UpdateDto updateDto)
         {
-            var exitingOrder = await _context.Orders.FindAsync(id);
+            var exitingOrder = await _context.Orders
+                .Include(o => o.Products)
+                .SingleOrDefaultAsync(o => o.Id == id);
 
             if (exitingOrder is null)
             {
@@ -127,7 +129,7 @@ namespace Order.core.Services
                 MailRequest mailRequest = new()
                 {
                     ToEmail = exitingOrder.Email,
-                    Subject = $"Order {exitingOrder.Id} Update",
+                    Subject = $"Đơn hàng của bạn đã được cập nhật",
                     Message = MailSend.OrderMailSend(exitingOrder)
                 };
                 await _gmailService.SendEmailAsync(mailRequest);

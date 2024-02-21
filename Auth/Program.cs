@@ -3,6 +3,7 @@ using Auth.Core.Context;
 using Auth.Core.interfaces;
 using Auth.Core.Models;
 using Auth.Core.Services;
+using Auth.Core.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -77,6 +78,10 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IUploadService, UploadService>();
 builder.Services.AddScoped<IAvatarService, AvatarService>();
+builder.Services.AddScoped<IGmailService, GmailService>();
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.Configure<Client>(builder.Configuration.GetSection("Client"));
 
 
 var app = builder.Build();

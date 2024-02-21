@@ -56,19 +56,14 @@ namespace Order.Core.Utils
     {
         public static string ToDescription(this Status status)
         {
-            switch (status)
+            return status switch
             {
-                case Status.PENDING:
-                    return "Đang xác thực";
-                case Status.CREATE:
-                    return "Đã xác nhận";
-                case Status.SHIPPING:
-                    return "Đang vận chuyển";
-                case Status.SUCCESS:
-                    return "Giao thành công";
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(status), status, null);
-            }
+                Status.PENDING => "đang chờ xác nhận",
+                Status.CREATE => "đã được khởi tạo",
+                Status.SHIPPING => "đang được vận chuyển",
+                Status.SUCCESS => "đã giao thành công",
+                _ => throw new ArgumentOutOfRangeException(nameof(status), status, null),
+            };
         }
     }
 
