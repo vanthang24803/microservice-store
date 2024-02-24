@@ -205,7 +205,7 @@ namespace Auth.Core.Services
                 {
                     ToEmail = email,
                     Subject = "Reset password",
-                    Message = "<a href='" + _client.Url + "/rest-password?userId=" + isExistsUser.Id + "&token=" + token
+                    Message = "<a href='" + _client.Url + "/reset-password?userId=" + isExistsUser.Id + "&token=" + token
                     + "' target='_blank'>Click here to reset password</a>"
 
                 };

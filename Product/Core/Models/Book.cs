@@ -11,13 +11,13 @@ namespace Product.Core.Models
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public string Brand { get; set; }
-    
-        public string Thumbnail { get; set; }
+        public string Brand { get; set; } = string.Empty;
 
-        public Information Information { get; set; }
+        public string Thumbnail { get; set; }  =string.Empty;
+
+        public Information? Information { get; set; } 
 
         public List<Category> Categories { get; set; } = new List<Category>();
 

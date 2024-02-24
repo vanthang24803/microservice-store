@@ -49,7 +49,12 @@ namespace Auth.Controllers
         {
             var message = await _authService.VerifyAccountAsync(userId, token);
 
-            if (message == "Account not found" || message == "Account verification failed.")
+            if (message == "Account not found")
+            {
+                return NotFound(message);
+            }
+
+            if (message == "Account verification failed.")
             {
                 return BadRequest(message);
             }

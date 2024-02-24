@@ -25,6 +25,12 @@ namespace Order.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateOrder([FromBody] OrderDto order)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+
             var result = await _orderService.CreateAsync(order);
             if (result.IsSucceed)
             {
@@ -39,6 +45,11 @@ namespace Order.Controllers
 
         public async Task<IActionResult> GetOrderByUser([FromRoute] string id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var result = await _orderService.GetAsync(id);
             return Ok(result);
         }
@@ -48,6 +59,11 @@ namespace Order.Controllers
 
         public async Task<IActionResult> GetDetail(string id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var result = await _orderService.GetDetailAsync(id);
 
             if (result is null)
@@ -62,6 +78,10 @@ namespace Order.Controllers
 
         public async Task<IActionResult> GetOrder()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var result = await _orderService.GetAllAsync();
             return Ok(result);
         }
@@ -70,6 +90,10 @@ namespace Order.Controllers
         [Route("{id}")]
         public async Task<IActionResult> UpdateOrder([FromRoute] string id, [FromBody] UpdateDto updateDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var result = await _orderService.UpdateAsync(id, updateDto);
             if (result.IsSucceed)
             {
@@ -83,6 +107,10 @@ namespace Order.Controllers
         [Route("{id}")]
         public async Task<IActionResult> DeleteOrder([FromRoute] string id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var result = await _orderService.DeleteAsync(id);
             if (result.IsSucceed)
             {
