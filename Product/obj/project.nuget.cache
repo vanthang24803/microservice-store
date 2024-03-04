@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0FifEkZQ9tNipp1fzZ2Lopgwnr/fAMDkU8gDuhEHuMKDEToS8TTldwFFIxUjmqFCLVTKzE2uWnWxIKJINWmu1A==",
+  "dgSpecHash": "fLyIn+Ypw+FRTSd1wTqnSBzIXg01pObqkxW4o5rrklCCarZQ4RMCmHMiEdb725To6oP+3pGB1oD2hsIgmCxfww==",
   "success": true,
-  "projectFilePath": "D:\\WorkSpace\\NET\\Microservice\\Product\\Product.csproj",
+  "projectFilePath": "D:\\WorkSpace\\NET\\microservice-store\\Product\\Product.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\closedxml\\0.102.2\\closedxml.0.102.2.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\cloudinarydotnet\\1.25.0\\cloudinarydotnet.1.25.0.nupkg.sha512",

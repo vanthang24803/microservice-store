@@ -3,7 +3,7 @@ namespace Order.core.Enum
     public enum Payment
     {
         COD,
-        BANKING,
+        BANK,
         SHOP,
     }
 }

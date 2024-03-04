@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\WorkSpace\\NET\\Microservice\\Product\\Product.csproj": {}
+    "D:\\WorkSpace\\NET\\microservice-store\\Product\\Product.csproj": {}
   },
   "projects": {
-    "D:\\WorkSpace\\NET\\Microservice\\Product\\Product.csproj": {
+    "D:\\WorkSpace\\NET\\microservice-store\\Product\\Product.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\WorkSpace\\NET\\Microservice\\Product\\Product.csproj",
+        "projectUniqueName": "D:\\WorkSpace\\NET\\microservice-store\\Product\\Product.csproj",
         "projectName": "Product",
-        "projectPath": "D:\\WorkSpace\\NET\\Microservice\\Product\\Product.csproj",
+        "projectPath": "D:\\WorkSpace\\NET\\microservice-store\\Product\\Product.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\WorkSpace\\NET\\Microservice\\Product\\obj\\",
+        "outputPath": "D:\\WorkSpace\\NET\\microservice-store\\Product\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"

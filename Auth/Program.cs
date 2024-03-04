@@ -4,6 +4,7 @@ using Auth.Core.interfaces;
 using Auth.Core.Models;
 using Auth.Core.Services;
 using Auth.Core.Utils;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -72,6 +73,8 @@ builder.Services
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
         };
     });
+
+
 
 
 builder.Services.AddScoped<IAuthService, AuthService>();

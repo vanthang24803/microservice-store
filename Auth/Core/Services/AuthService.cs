@@ -91,6 +91,116 @@ namespace Auth.Core.Services
 
         }
 
+        public async Task<AuthServiceResponseDto> SignInWithGoogleAsync(GoogleResponse googleResponse)
+        {
+            var user = await _userManager.FindByNameAsync(googleResponse.Email);
+
+            if (user is null)
+            {
+                ApplicationUser newUser = new ApplicationUser()
+                {
+                    FirstName = googleResponse.FirstName,
+                    LastName = googleResponse.LastName,
+                    Email = googleResponse.Email,
+                    UserName = googleResponse.Email,
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                    Avatar = googleResponse.Avatar,
+                    Address = string.Empty,
+                    EmailConfirmed = true,
+                };
+
+                var createUserResult = await _userManager.CreateAsync(newUser);
+                if (!createUserResult.Succeeded)
+                {
+                    var errorString = "User Creation Failed Beacause: ";
+                    foreach (var error in createUserResult.Errors)
+                    {
+                        errorString += " # " + error.Description;
+                    }
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = errorString
+                    };
+                }
+
+                await _userManager.AddToRoleAsync(newUser, StaticUserRole.USER);
+
+                var userRoles = await _userManager.GetRolesAsync(newUser);
+
+                var authClaims = new List<Claim>
+                {
+                    new(ClaimTypes.Name, newUser.UserName),
+                    new(ClaimTypes.NameIdentifier, newUser.Id),
+                    new("JWTID", Guid.NewGuid().ToString()),
+                    new("FirstName", newUser.FirstName),
+                    new("Avatar" , newUser.Avatar),
+                    new("LastName", newUser.LastName),
+                    new("Email" , newUser.Email ),
+                };
+
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                    authClaims.Add(new Claim("Role", userRole));
+                }
+
+                var token = tokenUtils.GenerateNewJsonWebToken(authClaims);
+
+                return new AuthServiceResponseDto()
+                {
+                    IsSucceed = true,
+                    Token = token,
+                    User = new UserDto
+                    {
+                        Id = newUser.Id,
+                        Email = newUser.Email,
+                        Name = $"{newUser.FirstName} {newUser.LastName}",
+                        Avatar = newUser.Avatar,
+                        Role = userRoles,
+                    }
+                };
+            }
+
+            else
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+
+                var authClaims = new List<Claim>
+                {
+                    new(ClaimTypes.Name, user.UserName),
+                    new(ClaimTypes.NameIdentifier, user.Id),
+                    new("JWTID", Guid.NewGuid().ToString()),
+                    new("FirstName", user.FirstName),
+                    new("Avatar" , user.Avatar),
+                    new("LastName", user.LastName),
+                    new("Email" , user.Email ),
+                 };
+
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                    authClaims.Add(new Claim("Role", userRole));
+                }
+
+                var token = tokenUtils.GenerateNewJsonWebToken(authClaims);
+
+                return new AuthServiceResponseDto()
+                {
+                    IsSucceed = true,
+                    Token = token,
+                    User = new UserDto
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        Name = $"{user.FirstName} {user.LastName}",
+                        Avatar = user.Avatar,
+                        Role = userRoles,
+                    }
+                };
+            }
+        }
+
         public async Task<AuthServiceResponseDto> MakeAdminAsync(UpdatePermissionDto updatePermissionDto)
         {
             var user = await _userManager.FindByEmailAsync(updatePermissionDto.Email);
@@ -111,9 +221,24 @@ namespace Auth.Core.Services
             };
         }
 
-        public Task<AuthServiceResponseDto> MakeOwnerAsync(UpdatePermissionDto updatePermissionDto)
+        public async Task<AuthServiceResponseDto> MakeManagerAsync(UpdatePermissionDto updatePermissionDto)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByEmailAsync(updatePermissionDto.Email);
+
+            if (user is null)
+                return new AuthServiceResponseDto()
+                {
+                    IsSucceed = false,
+                    Message = "Invalid User name!!!!!!!!"
+                };
+
+            await _userManager.AddToRoleAsync(user, StaticUserRole.MANAGER);
+
+            return new AuthServiceResponseDto()
+            {
+                IsSucceed = true,
+                Message = $"{user.Email} is Manager",
+            };
         }
 
         public async Task<AuthServiceResponseDto> RegisterAsync(RegisterDto registerDto)
@@ -265,7 +390,7 @@ namespace Auth.Core.Services
 
         public async Task<AuthServiceResponseDto> SeedRolesAsync()
         {
-            bool isOwnerRoleExists = await _roleManager.RoleExistsAsync(StaticUserRole.OWNER);
+            bool isOwnerRoleExists = await _roleManager.RoleExistsAsync(StaticUserRole.MANAGER);
             bool isAdminRoleExists = await _roleManager.RoleExistsAsync(StaticUserRole.ADMIN);
             bool isUserRoleExists = await _roleManager.RoleExistsAsync(StaticUserRole.USER);
 
@@ -278,7 +403,7 @@ namespace Auth.Core.Services
 
             await _roleManager.CreateAsync(new IdentityRole(StaticUserRole.USER));
             await _roleManager.CreateAsync(new IdentityRole(StaticUserRole.ADMIN));
-            await _roleManager.CreateAsync(new IdentityRole(StaticUserRole.OWNER));
+            await _roleManager.CreateAsync(new IdentityRole(StaticUserRole.MANAGER));
 
             return new AuthServiceResponseDto()
             {
@@ -286,6 +411,8 @@ namespace Auth.Core.Services
                 Message = "Role Seeding Done Successfully"
             };
         }
+
+
     }
 
 }

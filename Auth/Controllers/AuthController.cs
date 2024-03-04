@@ -1,8 +1,12 @@
+using System.IdentityModel.Tokens.Jwt;
 using Auth.Core.Constant;
 using Auth.Core.Dtos;
 using Auth.Core.interfaces;
+using Auth.Core.Utils;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Auth.Controllers
 {
@@ -11,6 +15,7 @@ namespace Auth.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+
 
         public AuthController(IAuthService authService)
         {
@@ -26,8 +31,6 @@ namespace Auth.Controllers
             return Ok(seerRoles);
         }
 
-
-        // Route -> Register
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
@@ -132,6 +135,46 @@ namespace Auth.Controllers
                 return Ok(operationResult);
 
             return BadRequest(operationResult);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = StaticUserRole.USER)]
+        [Route("make-manager")]
+        public async Task<IActionResult> MakeManager([FromBody] UpdatePermissionDto updatePermissionDto)
+        {
+            var operationResult = await _authService.MakeManagerAsync(updatePermissionDto);
+
+            if (operationResult.IsSucceed)
+                return Ok(operationResult);
+
+            return BadRequest(operationResult);
+        }
+
+        [HttpPost]
+        [Route("google")]
+        public async Task<IActionResult> SignInWithGoogle([FromQuery] string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadJwtToken(token);
+
+            var user = GoogleUntil.CreateFromJwtToken(jwtToken);
+
+            if (user != null)
+            {
+                var message = await _authService.SignInWithGoogleAsync(user);
+
+                if (!message.IsSucceed)
+                {
+                    return BadRequest(message);
+                }
+
+                return Ok(message);
+
+            }
+            else
+            {
+                return BadRequest("Token is valid");
+            }
         }
 
     }

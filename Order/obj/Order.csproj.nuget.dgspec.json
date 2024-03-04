@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\WorkSpace\\NET\\Microservice\\Order\\Order.csproj": {}
+    "D:\\WorkSpace\\NET\\microservice-store\\Order\\Order.csproj": {}
   },
   "projects": {
-    "D:\\WorkSpace\\NET\\Microservice\\Order\\Order.csproj": {
+    "D:\\WorkSpace\\NET\\microservice-store\\Order\\Order.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\WorkSpace\\NET\\Microservice\\Order\\Order.csproj",
+        "projectUniqueName": "D:\\WorkSpace\\NET\\microservice-store\\Order\\Order.csproj",
         "projectName": "Order",
-        "projectPath": "D:\\WorkSpace\\NET\\Microservice\\Order\\Order.csproj",
+        "projectPath": "D:\\WorkSpace\\NET\\microservice-store\\Order\\Order.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\WorkSpace\\NET\\Microservice\\Order\\obj\\",
+        "outputPath": "D:\\WorkSpace\\NET\\microservice-store\\Order\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"

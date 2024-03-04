@@ -12,7 +12,9 @@ namespace Auth.Core.interfaces
         Task<AuthServiceResponseDto> RegisterAsync(RegisterDto registerDto);
         Task<AuthServiceResponseDto> LoginAsync(LoginDto loginDto);
         Task<AuthServiceResponseDto> MakeAdminAsync(UpdatePermissionDto updatePermissionDto);
-        Task<AuthServiceResponseDto> MakeOwnerAsync(UpdatePermissionDto updatePermissionDto);
+        Task<AuthServiceResponseDto> MakeManagerAsync(UpdatePermissionDto updatePermissionDto);
+
+        Task<AuthServiceResponseDto> SignInWithGoogleAsync(GoogleResponse googleResponse);
 
         Task<string> VerifyAccountAsync(string userId, string token);
 
