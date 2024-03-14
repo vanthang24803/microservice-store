@@ -73,10 +73,6 @@ namespace Product.Core.Utils
                 }
             }
 
-            // Pagination
-            int skip = (query.Page - 1) * query.Limit;
-            listProducts = listProducts.Skip(skip).Take(query.Limit).ToList();
-
             if (!string.IsNullOrEmpty(query.Filter))
             {
                 if (query.Filter == "Alphabet")
