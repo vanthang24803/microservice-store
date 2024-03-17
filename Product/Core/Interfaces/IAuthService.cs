@@ -10,13 +10,14 @@ namespace Product.Core.Interfaces
         Task<ResponseDto> RegisterAsync(RegisterDto registerDto);
 
         Task<bool> IsExistsUserByEmail(string email);
+        Task<bool> IsExistsUserById(string id);
 
         Task<IResponse> LoginAsync(LoginDto loginDto);
 
         Task<ResponseDto> MakeAdminAsync(UpdatePermissionDto updatePermissionDto);
         Task<ResponseDto> MakeManagerAsync(UpdatePermissionDto updatePermissionDto);
 
-         Task<IResponse> SignInWithGoogleAsync(GoogleResponse googleResponse);
+        Task<IResponse> SignInWithGoogleAsync(GoogleResponse googleResponse);
 
         Task<string> VerifyAccountAsync(string userId, string token);
 

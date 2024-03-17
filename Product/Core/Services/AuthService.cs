@@ -404,5 +404,13 @@ namespace Product.Core.Services
                 };
             }
         }
+
+        public async Task<bool> IsExistsUserById(string id)
+        {
+            var existingUser = await _userManager.FindByIdAsync(id);
+
+            return existingUser != null;
+
+        }
     }
 }

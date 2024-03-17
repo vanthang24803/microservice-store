@@ -86,7 +86,7 @@ builder.Services
 
 // Auth
 builder.Services.AddScoped<IAuthService, AuthService>();
-
+builder.Services.AddScoped<IProfileService, ProfileService>();
 
 // Config
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));

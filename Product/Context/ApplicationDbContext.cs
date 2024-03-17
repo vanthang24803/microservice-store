@@ -6,6 +6,7 @@ namespace Product.Context
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
     {
+        public DbSet<Address> Addresses { get; set; }
         public DbSet<Image> Images { get; set; }
 
         public DbSet<Category> Categories { get; set; }
