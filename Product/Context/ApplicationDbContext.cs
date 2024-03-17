@@ -20,5 +20,10 @@ namespace Product.Context
         public DbSet<Voucher> Vouchers { get; set; }
 
         public DbSet<Information> Information { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+
     }
 }

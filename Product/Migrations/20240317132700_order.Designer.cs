@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Product.Context;
@@ -11,9 +12,11 @@ using Product.Context;
 namespace Product.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240317132700_order")]
+    partial class order
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -478,15 +481,13 @@ namespace Product.Migrations
 
             modelBuilder.Entity("Product.Core.Models.Order", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -544,6 +545,9 @@ namespace Product.Migrations
                     b.Property<string>("OrderId")
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("OrderId1")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("Price")
                         .HasColumnType("integer");
 
@@ -563,7 +567,7 @@ namespace Product.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId1");
 
                     b.ToTable("OrderDetails");
                 });
@@ -703,7 +707,7 @@ namespace Product.Migrations
                 {
                     b.HasOne("Product.Core.Models.Order", null)
                         .WithMany("Products")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId1");
                 });
 
             modelBuilder.Entity("Product.Core.Models.Book", b =>

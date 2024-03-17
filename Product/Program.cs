@@ -88,6 +88,10 @@ builder.Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 
+// Order
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IStatistical , Statistical>();
+
 // Config
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddScoped<IMailService, MailService>();

@@ -35,7 +35,7 @@ namespace Product.Controllers
         }
 
         [HttpPut]
-        // [Authorize]
+        [Authorize]
         [Route("{id}")]
         public async Task<IActionResult> UpdateProfile([FromRoute] string id, [FromBody] UpdateProfileDto updateProfileDto)
         {
@@ -66,6 +66,7 @@ namespace Product.Controllers
 
         [HttpPost]
         [Route("{id}/address")]
+        [Authorize]
 
         public async Task<IActionResult> CreateAddress([FromRoute] string id, [FromBody] AddressDto addressDto)
         {
@@ -81,6 +82,7 @@ namespace Product.Controllers
 
         [HttpGet]
         [Route("{id}/address")]
+        [Authorize]
 
         public async Task<IActionResult> FindAllAddress([FromRoute] string id)
         {
@@ -97,6 +99,8 @@ namespace Product.Controllers
 
         [HttpPut]
         [Route("{id}/address/{addressId}")]
+        [Authorize]
+
         public async Task<IActionResult> UpdateAddress([FromRoute] string id, [FromRoute] Guid addressId, [FromBody] AddressDto addressDto)
         {
             var result = await _profileService.UpdateAddressAsync(id, addressId, addressDto);
@@ -111,6 +115,8 @@ namespace Product.Controllers
 
         [HttpDelete]
         [Route("{id}/address/{addressId}")]
+        [Authorize]
+
         public async Task<IActionResult> DeleteAddress([FromRoute] string id, [FromRoute] Guid addressId)
         {
             var result = await _profileService.DeleteAddressAsync(id, addressId);
