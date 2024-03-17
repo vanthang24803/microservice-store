@@ -12,9 +12,9 @@ namespace Product.Core.Models
 
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        public string Thumbnail { get; set; }
+        public string Thumbnail { get; set; } = string.Empty;
 
-        public string Url { get; set; }
+        public string Url { get; set; } = string.Empty;
 
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 

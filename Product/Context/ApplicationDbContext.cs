@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Product.Core.Models;
 
 namespace Product.Context
 {
-    public class ApplicationDbContext(DbContextOptions dbContextOptions) : DbContext(dbContextOptions)
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
     {
         public DbSet<Image> Images { get; set; }
 

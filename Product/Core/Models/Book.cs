@@ -15,9 +15,9 @@ namespace Product.Core.Models
 
         public string Brand { get; set; } = string.Empty;
 
-        public string Thumbnail { get; set; }  =string.Empty;
+        public string Thumbnail { get; set; } = string.Empty;
 
-        public Information? Information { get; set; } 
+        public Information? Information { get; set; }
 
         public List<Category> Categories { get; set; } = new List<Category>();
 

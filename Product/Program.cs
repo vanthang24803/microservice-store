@@ -1,9 +1,11 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Product.Context;
 using Product.Core.Interfaces;
+using Product.Core.Models;
 using Product.Core.Services;
 using Product.Core.Utils;
 
@@ -31,6 +33,23 @@ builder.Services.AddCors(options =>
 
 
 builder.Services
+    .AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequiredLength = 8;
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.SignIn.RequireConfirmedEmail = false;
+    options.User.RequireUniqueEmail = true;
+});
+
+// JWT config
+builder.Services
     .AddAuthentication(options =>
     {
         options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -51,6 +70,7 @@ builder.Services
         };
     });
 
+// Product
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.
@@ -64,6 +84,13 @@ builder.Services.AddScoped<IVoucherService, VoucherService>();
 builder.Services
             .AddScoped<IInformationService, InformationService>();
 
+// Auth
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+
+// Config
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddScoped<IMailService, MailService>();
 
 var app = builder.Build();
 

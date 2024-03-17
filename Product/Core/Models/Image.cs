@@ -11,7 +11,7 @@ namespace Product.Core.Models
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        public string Url { get; set; }
+        public string Url { get; set; } = string.Empty;
 
         public Guid? BookId { get; set; }
 

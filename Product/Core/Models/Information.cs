@@ -11,29 +11,29 @@ namespace Product.Core.Models
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        public string Author { get; set; }
+        public string Author { get; set; } = string.Empty;
 
-        public string Translator { get; set; }
+        public string Translator { get; set; } = string.Empty;
 
-        public string Category { get; set; }
+        public string Category { get; set; } = string.Empty;
 
-        public string Format { get; set; }
+        public string Format { get; set; } = string.Empty;
 
-        public string NumberOfPage { get; set; }
+        public string NumberOfPage { get; set; } = string.Empty;
 
-        public string ISBN { get; set; }
+        public string ISBN { get; set; } = string.Empty;
 
-        public string Publisher { get; set; }
+        public string Publisher { get; set; } = string.Empty;
 
-        public string Company { get; set; }
+        public string Company { get; set; } = string.Empty;
 
-        public string Gift { get; set; }
+        public string Gift { get; set; } = string.Empty;
 
-        public string Price { get; set; }
+        public string Price { get; set; } = string.Empty;
 
-        public string Released { get; set; }
+        public string Released { get; set; } = string.Empty;
 
-        public string Introduce { get; set; }
+        public string Introduce { get; set; } = string.Empty;
 
         public Guid? BookId { get; set; }
 
