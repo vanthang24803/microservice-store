@@ -20,6 +20,11 @@ namespace Product.Core.Interfaces
 
         Task<IResponse> DeleteAddressAsync(string id, Guid addressId);
 
-         Task<ResponseDto> UploadAvatarAsync(string id, IFormFile file);
+        Task<IResponse> ActiveAddressAsync(string id, Guid addressId);
+
+
+        Task<ResponseDto> UploadAvatarAsync(string id, IFormFile file);
+
+
     }
 }

@@ -10,13 +10,11 @@ namespace Product.Controllers
     [Route("/api/auth")]
     public class AuthController : Controller
     {
-        private readonly ILogger<AuthController> _logger;
 
         private readonly IAuthService _authService;
 
-        public AuthController(ILogger<AuthController> logger, IAuthService authService)
+        public AuthController(IAuthService authService)
         {
-            _logger = logger;
             _authService = authService;
         }
 
@@ -164,7 +162,6 @@ namespace Product.Controllers
 
             var user = GoogleUntil.CreateFromJwtToken(jwtToken);
 
-            if (user != null)
             {
                 var message = await _authService.SignInWithGoogleAsync(user);
 
@@ -175,10 +172,6 @@ namespace Product.Controllers
 
                 return Ok(message);
 
-            }
-            else
-            {
-                return BadRequest("Token is valid");
             }
         }
 

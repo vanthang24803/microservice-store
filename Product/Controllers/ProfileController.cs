@@ -20,7 +20,6 @@ namespace Product.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [Route("{id}")]
         public async Task<IActionResult> GetProfile([FromRoute] string id)
         {
@@ -66,7 +65,7 @@ namespace Product.Controllers
 
         [HttpPost]
         [Route("{id}/address")]
-        [Authorize]
+        // [Authorize]
 
         public async Task<IActionResult> CreateAddress([FromRoute] string id, [FromBody] AddressDto addressDto)
         {
@@ -82,7 +81,7 @@ namespace Product.Controllers
 
         [HttpGet]
         [Route("{id}/address")]
-        [Authorize]
+        // [Authorize]
 
         public async Task<IActionResult> FindAllAddress([FromRoute] string id)
         {
@@ -96,6 +95,24 @@ namespace Product.Controllers
 
             return Ok(result);
         }
+
+
+        [HttpPut]
+        [Route("{id}/address/{addressId}/active")]
+        // [Authorize]
+
+        public async Task<IActionResult> ActiveAddress([FromRoute] string id, [FromRoute] Guid addressId)
+        {
+            var result = await _profileService.ActiveAddressAsync(id, addressId);
+
+            if (result.IsSucceed)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
+
 
         [HttpPut]
         [Route("{id}/address/{addressId}")]

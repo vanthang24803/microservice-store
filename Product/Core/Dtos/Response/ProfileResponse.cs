@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Product.Core.Utils;
 
 namespace Product.Core.Dtos.Response
 {
@@ -21,6 +22,12 @@ namespace Product.Core.Dtos.Response
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Avatar { get; set; } = string.Empty;
+
+        public string Rank { get; set; }
+
+        public double TotalPrice { get; set; }
+
+        public int TotalOrder { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> Role { get; set; } = [];

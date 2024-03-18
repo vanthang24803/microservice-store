@@ -5,6 +5,7 @@ using Product.Core.Dtos.Auth;
 using Product.Core.Dtos.Response;
 using Product.Core.Interfaces;
 using Product.Core.Models;
+using Product.Core.Utils;
 
 namespace Product.Core.Services
 {
@@ -22,6 +23,47 @@ namespace Product.Core.Services
             _upload = upload;
         }
 
+        public async Task<IResponse> ActiveAddressAsync(string id, Guid addressId)
+        {
+            var exitingUser = await _userManager.FindByIdAsync(id);
+
+            if (exitingUser is null)
+            {
+                return new ResponseDto()
+                {
+                    IsSucceed = false,
+                    Message = "Profile not found"
+                };
+            }
+
+            var existingAddress = await _context.Addresses.FindAsync(addressId);
+
+            if (existingAddress is null)
+            {
+                return new ResponseDto()
+                {
+                    IsSucceed = false,
+                    Message = "Address not found"
+                };
+            }
+
+            var activeAddress = await _context.Addresses.FirstOrDefaultAsync(a => a.Status == true);
+            if (activeAddress != null)
+            {
+                activeAddress.Status = false;
+            }
+
+            existingAddress.Status = true;
+
+            await _context.SaveChangesAsync();
+
+            return new ResponseDto()
+            {
+                IsSucceed = true,
+                Message = "Update Status Success"
+            };
+        }
+
         public async Task<IResponse> CreateAddressAsync(string id, AddressDto addressDto)
         {
             var exitingUser = await _userManager.FindByIdAsync(id);
@@ -35,16 +77,20 @@ namespace Product.Core.Services
                 };
             }
 
+
+            bool hasAddresses = await _context.Addresses.AnyAsync(a => a.UserId == id);
+
             var newAddress = new Address
             {
                 Name = addressDto.Name,
-                Status = false,
+                Status = !hasAddresses,
                 UserId = exitingUser.Id,
             };
 
             _context.Addresses.Add(newAddress);
 
             await _context.SaveChangesAsync();
+
 
             return new ResponseDto()
             {
@@ -109,6 +155,29 @@ namespace Product.Core.Services
 
             var userRoles = await _userManager.GetRolesAsync(exitingUser);
 
+            var rankMapping = new Dictionary<(double, double?), string>()
+            {
+                { (0 , 100000), StaticRankRole.Bronze },
+                { (100000, 500000), StaticRankRole.Silver },
+                { (500000 , 1500000), StaticRankRole.Gold },
+                { (1500000 , 3500000), StaticRankRole.Platinum },
+                { (3500000, null), StaticRankRole.Diamond }
+            };
+
+            var orders = await _context.Orders
+                                        .Where(c => c.UserId == id)
+                                        .Select(x => x.TotalPrice)
+                                        .ToListAsync();
+
+            double totalUserPrice = orders.DefaultIfEmpty(0).Sum();
+
+            int totalUserOrder = await _context.Orders.Where(c => c.UserId == id)
+                                                    .CountAsync();
+
+
+            string Rank = GetRank(totalUserPrice, rankMapping);
+
+
             return new ProfileResponse()
             {
                 IsSucceed = true,
@@ -119,9 +188,26 @@ namespace Product.Core.Services
                     FullName = exitingUser.LastName,
                     Avatar = exitingUser.Avatar,
                     Email = exitingUser.Email,
+                    TotalPrice = totalUserPrice,
+                    TotalOrder = totalUserOrder,
+                    Rank = Rank,
                     Role = [.. userRoles],
                 }
             };
+        }
+
+        private static string GetRank(double totalUserPrice, Dictionary<(double, double?), string> rankMapping)
+        {
+            var rankThreshold = rankMapping.Keys.LastOrDefault(k => k.Item1 <= totalUserPrice && (k.Item2 == null || k.Item2 >= totalUserPrice));
+
+            if (!rankThreshold.Equals(default((double, double?))))
+            {
+                return rankMapping[rankThreshold];
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         public async Task<IResponse> UpdateAddressAsync(string id, Guid addressId, AddressDto addressDto)
