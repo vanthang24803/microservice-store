@@ -12,11 +12,21 @@ namespace Product.Controllers
         private readonly IBookService _bookService;
         private readonly ICategoryProductService _categoryProduct;
 
-        public BookController(IBookService bookService, ICategoryProductService categoryProduct, IOptionsService optionsService, IPhotoService photoService)
+        public BookController(IBookService bookService, ICategoryProductService categoryProduct)
         {
             _bookService = bookService;
             _categoryProduct = categoryProduct;
         }
+
+        [HttpGet]
+        [Route("selling")]
+
+        public async Task<IActionResult> GetSellingBooks()
+        {
+            var result = await _bookService.GetBooksSelling();
+            return Ok(result);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)

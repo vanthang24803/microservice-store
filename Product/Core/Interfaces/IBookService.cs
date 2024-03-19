@@ -20,6 +20,8 @@ namespace Product.Core.Interfaces
 
         public Task<Book?> GetDetailAsync(Guid id);
 
+        public Task<List<Book>> GetBooksSelling();
+
         public Task<double> GetTotalProduct();
     }
 }

@@ -1,13 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Product.Context;
 using Product.Core.Dtos.Book;
-using Product.Core.Dtos.Category;
-using Product.Core.Dtos.Image;
-using Product.Core.Dtos.Option;
 using Product.Core.Interfaces;
 using Product.Core.Mapper;
 using Product.Core.Models;
@@ -161,6 +154,36 @@ namespace Product.Core.Services
                             .SumAsync(o => o.Quantity);
 
             return totalQuantity;
-        }       
+        }
+
+        public async Task<List<Book>> GetBooksSelling()
+        {
+            List<Book> topSellingBooks = [];
+            var listTopSellingProducts = await _context.OrderDetails
+                                .GroupBy(od => od.ProductId)
+                                .Select(g =>
+                                    new { ProductId = g.Key, TotalQuantity = g.Sum(x => x.Quantity) })
+                                .OrderByDescending(x => x.TotalQuantity)
+                                .Take(10)
+                                .ToListAsync();
+
+            foreach (var product in listTopSellingProducts)
+            {
+                var book = await _context.Books
+                    .Include(b => b.Images.OrderByDescending(s => s.CreateAt))
+                    .Include(b => b.Categories)
+                    .Include(b => b.Options)
+                    .FirstOrDefaultAsync(i => i.Id == Guid.Parse(product.ProductId))
+
+                ;
+
+                if (book != null)
+                {
+                    topSellingBooks.Add(book);
+                }
+            }
+
+            return topSellingBooks;
+        }
     }
 }
