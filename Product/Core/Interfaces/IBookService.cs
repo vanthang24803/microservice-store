@@ -23,5 +23,7 @@ namespace Product.Core.Interfaces
         public Task<List<Book>> GetBooksSelling();
 
         public Task<double> GetTotalProduct();
+
+        public Task<ResponseDto> UpdateDetailAsync(Guid id , DetailDto detailDto); 
     }
 }

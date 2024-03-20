@@ -104,7 +104,6 @@ namespace Product.Core.Services
         public async Task<Book?> GetDetailAsync(Guid id)
         {
             var existingProduct = await _context.Books
-                    .Include(a => a.Information)
                     .Include(c => c.Categories)
                     .Include(i => i.Images)
                     .Include(o => o.Options)
@@ -184,6 +183,32 @@ namespace Product.Core.Services
             }
 
             return topSellingBooks;
+        }
+
+        public async Task<ResponseDto> UpdateDetailAsync(Guid id, DetailDto detail)
+        {
+            var exitingBook = await _context.Books.FindAsync(id);
+
+            if (exitingBook is null)
+            {
+                return new ResponseDto()
+                {
+                    IsSucceed = false,
+                    Message = "Product not found"
+                };
+            }
+
+            exitingBook.Detail = detail.Detail;
+            exitingBook.Introduction = detail.Introduction;
+
+            await _context.SaveChangesAsync();
+
+            return new ResponseDto()
+            {
+                IsSucceed = true,
+                Message = "Update Detail Success"
+            };
+
         }
     }
 }

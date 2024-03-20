@@ -81,8 +81,7 @@ builder.Services.AddScoped<IUploadService, UploadService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IBillboardService, BillboardService>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
-builder.Services
-            .AddScoped<IInformationService, InformationService>();
+
 
 // Auth
 builder.Services.AddScoped<IAuthService, AuthService>();

@@ -95,17 +95,13 @@ namespace Product.Controllers
         {
             var message = await _authService.VerifyAccountAsync(userId, token);
 
-            if (message == "Account not found")
-            {
-                return NotFound(message);
-            }
-
-            if (message == "Account verification failed.")
+            if (!message.IsSucceed)
             {
                 return BadRequest(message);
             }
 
             return Ok(message);
+
         }
 
         [HttpPost]

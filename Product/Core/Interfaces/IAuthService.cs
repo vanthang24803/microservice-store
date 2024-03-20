@@ -19,7 +19,7 @@ namespace Product.Core.Interfaces
 
         Task<IResponse> SignInWithGoogleAsync(GoogleResponse googleResponse);
 
-        Task<string> VerifyAccountAsync(string userId, string token);
+        Task<IResponse> VerifyAccountAsync(string userId, string token);
 
         Task<string> ForgotPasswordAsync(string email);
 

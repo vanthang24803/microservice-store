@@ -166,23 +166,64 @@ namespace Product.Core.Services
             };
         }
 
-        public async Task<string> VerifyAccountAsync(string userId, string token)
+        public async Task<IResponse> VerifyAccountAsync(string userId, string token)
         {
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user == null)
             {
-                return "Account not found";
+                return new ResponseDto()
+                {
+                    IsSucceed = false,
+                    Message = "Email not found",
+                };
             }
 
             var result = await _userManager.ConfirmEmailAsync(user, token);
 
             if (result.Succeeded)
             {
-                return "Account verified successfully";
+                var userRoles = await _userManager.GetRolesAsync(user);
+
+                var authClaims = new List<Claim>
+                {
+                new(ClaimTypes.Name, user.UserName),
+                new(ClaimTypes.NameIdentifier, user.Id),
+                new("JWTID", Guid.NewGuid().ToString()),
+                new("FirstName", user.FirstName),
+                new("Avatar" , user.Avatar),
+                new("LastName", user.LastName),
+                new("Email" , user.Email ),
+                };
+
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                    authClaims.Add(new Claim("Role", userRole));
+                }
+
+                var tokenLogin = tokenUtils.GenerateNewJsonWebToken(authClaims);
+
+                return new LoginResponse()
+                {
+                    IsSucceed = true,
+                    Token = tokenLogin,
+                    User = new User
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        Name = $"{user.FirstName} {user.LastName}",
+                        Avatar = user.Avatar,
+                        Role = userRoles,
+                    }
+                };
             }
 
-            return "Account verification failed.";
+            return new ResponseDto()
+            {
+                IsSucceed = false,
+                Message = "Verify error",
+            };
         }
 
         public async Task<string> ResetPasswordAsync(string userId, string token, string newPassword)

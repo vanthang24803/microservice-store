@@ -18,6 +18,29 @@ namespace Product.Controllers
             _categoryProduct = categoryProduct;
         }
 
+        [HttpPut]
+        [Route("{id}/detail")]
+
+        public async Task<IActionResult> UpdateDetailBook(
+         [FromRoute] Guid id, [FromBody] DetailDto detail
+        )
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _bookService.UpdateDetailAsync(id, detail);
+
+            if (result.IsSucceed)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+
+        }
+
         [HttpGet]
         [Route("selling")]
 
