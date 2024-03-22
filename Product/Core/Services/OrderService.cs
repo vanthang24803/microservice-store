@@ -29,6 +29,17 @@ namespace Product.Core.Services
 
             _context.Orders.Add(order);
 
+            var exitingVoucher = await _context.Vouchers.FirstOrDefaultAsync(c => c.Code == orderDto.Voucher);
+
+            if (exitingVoucher != null)
+            {
+                exitingVoucher.Quantity -= 1;
+                if (exitingVoucher.Quantity == 0)
+                {
+                    exitingVoucher.Expire = true;
+                }
+            }
+
             foreach (var product in orderDto.Products)
             {
                 var book = await _context.Books.FindAsync(Guid.Parse(product.ProductId));

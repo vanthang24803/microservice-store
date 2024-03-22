@@ -1,18 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Product.Core.Dtos.Voucher
 {
     public class CreateVoucher
     {
         [Required(ErrorMessage = "Name is Required")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Tile is Required")]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Quantity is Required")]
         public double Quantity { get; set; } = 0;
@@ -21,6 +17,7 @@ namespace Product.Core.Dtos.Voucher
         public int Day { get; set; } = 0;
 
         public bool Type { get; set; } = false;
+        public int Discount { get; set; }
 
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 

@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Product.Core.Dtos.Response;
 using Product.Core.Dtos.Voucher;
 using Product.Core.Models;
 
@@ -16,6 +13,8 @@ namespace Product.Core.Interfaces
         Task<ResponseDto> UseAsync(UseVoucher useVoucher);
 
         Task<ResponseDto> DeleteAsync(Guid id);
+
+        Task<IResponse> FindVoucherByCodeAsync(VoucherRequest voucher);
 
         Task<ResponseDto> UpdateAsync(Guid id, UpdateVoucher updateVoucher);
 

@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Product.Context;
+using Product.Core.Dtos.Response;
 using Product.Core.Dtos.Voucher;
 using Product.Core.Interfaces;
 using Product.Core.Mapper;
 using Product.Core.Models;
-using Product.Core.Utils;
 
 namespace Product.Core.Services
 {
@@ -101,6 +97,36 @@ namespace Product.Core.Services
                 IsSucceed = true,
                 Message = "Extend voucher successfully"
             };
+        }
+
+        public async Task<IResponse> FindVoucherByCodeAsync(VoucherRequest voucher)
+        {
+            var exitingVoucher = await _context.Vouchers.FirstOrDefaultAsync(x => x.Code == voucher.Code);
+
+            if (exitingVoucher == null)
+            {
+                return new ResponseDto()
+                {
+                    IsSucceed = false,
+                    Message = "Voucher not found!"
+                };
+            }
+
+            if (exitingVoucher.ShelfLife <= DateTime.Now)
+            {
+                return new ResponseDto()
+                {
+                    IsSucceed = false,
+                    Message = "Voucher expired!"
+                };
+            }
+
+            return new VoucherResponse()
+            {
+                IsSucceed = true,
+                Voucher = exitingVoucher,
+            };
+
         }
 
         public async Task<List<Voucher>> GetAsync()

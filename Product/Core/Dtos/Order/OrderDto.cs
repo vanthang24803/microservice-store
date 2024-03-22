@@ -17,6 +17,8 @@ namespace Product.Core.Dtos.Order
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Status Status { get; set; } = Status.PENDING;
         public int Quantity { get; set; }
+
+        public string Voucher { get; set; } = string.Empty;
         public double TotalPrice { get; set; }
         public string UserId { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;

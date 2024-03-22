@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Product.Core.Dtos.Voucher;
 using Product.Core.Interfaces;
@@ -18,6 +14,27 @@ namespace Product.Controllers
         {
             _voucherService = voucherService;
         }
+
+        [HttpPost]
+        [Route("find")]
+
+        public async Task<IActionResult> FindVoucher([FromBody] VoucherRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _voucherService.FindVoucherByCodeAsync(request);
+
+            if (result.IsSucceed)
+            {
+                return Ok(result);
+            }
+
+            return NotFound(result);
+        }
+
 
         [HttpPost]
 
