@@ -15,6 +15,26 @@ namespace Product.Controllers
             _voucherService = voucherService;
         }
 
+        [HttpGet]
+        [Route("{id}")]
+
+        public async Task<IActionResult> FindVoucherById([FromRoute] Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _voucherService.FindVoucherById(id);
+
+            if (result != null)
+            {
+                return Ok(result);
+            }
+
+            return NotFound("Voucher not found");
+        }
+
         [HttpPost]
         [Route("find")]
 

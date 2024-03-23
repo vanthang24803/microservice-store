@@ -129,6 +129,23 @@ namespace Product.Core.Services
 
         }
 
+        public async Task<Voucher?> FindVoucherById(Guid id)
+        {
+            var exitingVoucher = await _context.Vouchers.FindAsync(id);
+
+            if (exitingVoucher == null)
+            {
+                return null;
+            }
+
+            if (exitingVoucher.ShelfLife <= DateTime.Now)
+            {
+                return null;
+            }
+
+            return exitingVoucher;
+        }
+
         public async Task<List<Voucher>> GetAsync()
         {
             return await _context.Vouchers.ToListAsync();
@@ -151,6 +168,9 @@ namespace Product.Core.Services
             exitingVoucher.Title = updateVoucher.Title;
             exitingVoucher.Quantity = updateVoucher.Quantity;
             exitingVoucher.Type = updateVoucher.Type;
+            exitingVoucher.Day = updateVoucher.Day;
+            exitingVoucher.ShelfLife = exitingVoucher.ShelfLife.AddDays(exitingVoucher.Day);
+            exitingVoucher.Discount = updateVoucher.Discount;
             exitingVoucher.UpdateAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();

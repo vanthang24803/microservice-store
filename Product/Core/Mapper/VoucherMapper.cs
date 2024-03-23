@@ -16,6 +16,7 @@ namespace Product.Core.Mapper
                 Quantity = createVoucher.Quantity,
                 Day = createVoucher.Day,
                 ShelfLife = createVoucher.CreateAt.AddDays(createVoucher.Day),
+                Discount = createVoucher.Discount,
                 CreateAt = createVoucher.CreateAt,
                 UpdateAt = createVoucher.UpdateAt,
             };

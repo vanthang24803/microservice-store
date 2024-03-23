@@ -26,7 +26,7 @@ namespace Product.Core.Models
 
         public bool Expire { get; set; } = false;
 
-        public int Discount { get; set; }
+        public double Discount { get; set; }
 
         public DateTime ShelfLife { get; set; }
 

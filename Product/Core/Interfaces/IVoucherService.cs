@@ -15,6 +15,7 @@ namespace Product.Core.Interfaces
         Task<ResponseDto> DeleteAsync(Guid id);
 
         Task<IResponse> FindVoucherByCodeAsync(VoucherRequest voucher);
+        Task<Voucher?> FindVoucherById(Guid id);
 
         Task<ResponseDto> UpdateAsync(Guid id, UpdateVoucher updateVoucher);
 
