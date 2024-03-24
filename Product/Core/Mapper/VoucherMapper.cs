@@ -15,10 +15,9 @@ namespace Product.Core.Mapper
                 Code = RandomCode.Generate(),
                 Quantity = createVoucher.Quantity,
                 Day = createVoucher.Day,
-                ShelfLife = createVoucher.CreateAt.AddDays(createVoucher.Day),
+                ShelfLife = createVoucher.ShelfLife,
                 Discount = createVoucher.Discount,
                 CreateAt = createVoucher.CreateAt,
-                UpdateAt = createVoucher.UpdateAt,
             };
         }
     }

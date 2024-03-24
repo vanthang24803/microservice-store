@@ -20,7 +20,6 @@ namespace Product.Core.Dtos.Voucher
         public int Discount { get; set; }
 
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
-
-        public DateTime UpdateAt { get; set; } = DateTime.UtcNow;
+        public DateTime ShelfLife { get; set; }
     }
 }

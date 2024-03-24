@@ -169,7 +169,7 @@ namespace Product.Core.Services
             exitingVoucher.Quantity = updateVoucher.Quantity;
             exitingVoucher.Type = updateVoucher.Type;
             exitingVoucher.Day = updateVoucher.Day;
-            exitingVoucher.ShelfLife = exitingVoucher.ShelfLife.AddDays(exitingVoucher.Day);
+            exitingVoucher.ShelfLife = updateVoucher.ShelfLife;
             exitingVoucher.Discount = updateVoucher.Discount;
             exitingVoucher.UpdateAt = DateTime.UtcNow;
 
