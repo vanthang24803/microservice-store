@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Product.Core.Dtos.Review;
 using Product.Core.Interfaces;
+using Product.Core.Utils;
 
 namespace Product.Controllers
 {
@@ -74,14 +75,14 @@ namespace Product.Controllers
         [HttpGet]
         [Route("{productId}/review")]
 
-        public async Task<IActionResult> FindReviewByProduct([FromRoute] Guid productId)
+        public async Task<IActionResult> FindReviewByProduct([FromRoute] Guid productId, [FromQuery] QueryReview query)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _reviewService.FindAllAsync(productId);
+            var result = await _reviewService.FindAllAsync(productId, query);
 
             if (result is null)
             {

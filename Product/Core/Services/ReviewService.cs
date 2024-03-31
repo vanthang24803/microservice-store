@@ -1,4 +1,3 @@
-using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.EntityFrameworkCore;
 using Product.Context;
 using Product.Core.Dtos.Response;
@@ -6,6 +5,7 @@ using Product.Core.Dtos.Review;
 using Product.Core.Interfaces;
 using Product.Core.Mapper;
 using Product.Core.Models;
+using Product.Core.Utils;
 
 namespace Product.Core.Services
 {
@@ -115,10 +115,21 @@ namespace Product.Core.Services
             };
         }
 
-        public async Task<List<Reviews>> FindAllAsync(Guid productId)
+        public async Task<List<Reviews>> FindAllAsync(Guid productId, QueryReview query)
         {
 
-            return await _context.Reviews.Where(x => x.BookId == productId).ToListAsync();
+            var reviews = await _context.Reviews
+                        .Where(x => x.BookId == productId)
+                        .Include(c => c.Images)
+                        .AsQueryable()
+                        .ToListAsync();
+
+
+            var filter = new ReviewFilter();
+
+            reviews = filter.ApplyFilters(reviews, query);
+
+            return reviews;
 
         }
 
@@ -151,7 +162,7 @@ namespace Product.Core.Services
                 };
             }
 
-            existingReview.Start = update.Start;
+            existingReview.Star = update.Star;
             existingReview.Content = update.Content;
 
             await _context.SaveChangesAsync();

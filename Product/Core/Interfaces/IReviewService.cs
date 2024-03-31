@@ -1,6 +1,7 @@
 using Product.Core.Dtos.Response;
 using Product.Core.Dtos.Review;
 using Product.Core.Models;
+using Product.Core.Utils;
 
 namespace Product.Core.Interfaces
 {
@@ -10,7 +11,7 @@ namespace Product.Core.Interfaces
 
         Task<IResponse> UpdateAsync(Guid productId, Guid reviewId, UpdateReview updateReview);
 
-        Task<List<Reviews>> FindAllAsync(Guid productId);
+        Task<List<Reviews>> FindAllAsync(Guid productId , QueryReview query);
 
         Task<IResponse> DeleteAsync(Guid productId, Guid reviewId);
 

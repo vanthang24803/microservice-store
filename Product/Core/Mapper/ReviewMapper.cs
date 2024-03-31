@@ -10,7 +10,7 @@ namespace Product.Core.Mapper
             return new Reviews
             {
                 Content = reviewDto.Content,
-                Start = reviewDto.Start,
+                Star = reviewDto.Star,
                 CustomerName = reviewDto.CustomerName,
                 CustomerAvatar = reviewDto.CustomerAvatar,
                 CustomerId = reviewDto.CustomerId,
