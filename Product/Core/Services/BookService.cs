@@ -107,6 +107,7 @@ namespace Product.Core.Services
                     .Include(c => c.Categories)
                     .Include(i => i.Images)
                     .Include(o => o.Options)
+                    .Include(r => r.Reviews).ThenInclude(rv => rv.Images)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (existingProduct is null)

@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+
 
 namespace Product.Core.Models
 {
@@ -13,7 +11,11 @@ namespace Product.Core.Models
 
         public string Url { get; set; } = string.Empty;
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Guid? BookId { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Guid? ReviewId { get; set; }
 
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 

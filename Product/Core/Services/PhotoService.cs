@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using CloudinaryDotNet.Actions;
-using DocumentFormat.OpenXml.Office.CustomUI;
 using Microsoft.EntityFrameworkCore;
 using Product.Context;
 using Product.Core.Interfaces;

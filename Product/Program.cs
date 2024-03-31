@@ -89,7 +89,10 @@ builder.Services.AddScoped<IProfileService, ProfileService>();
 
 // Order
 builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IStatistical , Statistical>();
+builder.Services.AddScoped<IStatistical, Statistical>();
+
+// Review
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 // Config
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));

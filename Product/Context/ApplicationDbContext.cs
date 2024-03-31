@@ -23,5 +23,7 @@ namespace Product.Context
 
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
+        public DbSet<Reviews> Reviews { get; set; }
+
     }
 }

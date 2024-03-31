@@ -12,12 +12,14 @@ namespace Product.Core.Models
         public string Brand { get; set; } = string.Empty;
 
         public string Thumbnail { get; set; } = string.Empty;
-        
+
         public List<Category> Categories { get; set; } = new List<Category>();
 
         public List<Options> Options { get; set; } = new List<Options>();
 
         public List<Image> Images { get; set; } = new List<Image>();
+
+        public List<Reviews> Reviews { get; set; } = new List<Reviews>();
 
         public string Detail { get; set; } = string.Empty;
 

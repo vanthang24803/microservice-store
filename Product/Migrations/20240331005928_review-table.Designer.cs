@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Product.Context;
@@ -11,9 +12,11 @@ using Product.Context;
 namespace Product.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240331005928_review-table")]
+    partial class reviewtable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -519,9 +522,6 @@ namespace Product.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("BookId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -543,15 +543,13 @@ namespace Product.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<float>("Start")
-                        .HasColumnType("real");
+                    b.Property<int>("Start")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId");
 
                     b.ToTable("Reviews");
                 });
@@ -694,20 +692,11 @@ namespace Product.Migrations
                         .HasForeignKey("OrderId");
                 });
 
-            modelBuilder.Entity("Product.Core.Models.Reviews", b =>
-                {
-                    b.HasOne("Product.Core.Models.Book", null)
-                        .WithMany("Reviews")
-                        .HasForeignKey("BookId");
-                });
-
             modelBuilder.Entity("Product.Core.Models.Book", b =>
                 {
                     b.Navigation("Images");
 
                     b.Navigation("Options");
-
-                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("Product.Core.Models.Order", b =>
