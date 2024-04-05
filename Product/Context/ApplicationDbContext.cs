@@ -25,5 +25,7 @@ namespace Product.Context
 
         public DbSet<Reviews> Reviews { get; set; }
 
+        public DbSet<Blog> Blogs { get; set; }
+
     }
 }
