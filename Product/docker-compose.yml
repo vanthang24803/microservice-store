@@ -1,12 +1,51 @@
-# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+version: "3.4"
 
-version: '3.4'
+networks:
+  dev:
+    driver: bridge
 
 services:
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-container
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@domain.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+    ports:
+      - "5050:80"
+    networks:
+      - dev
+
+  db:
+    image: postgres
+    container_name: postgres-container
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=store
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - dev
+
   product:
     image: product
     build:
       context: .
       dockerfile: ./Dockerfile
+    depends_on:
+      - db
+    container_name: api-store
     ports:
-      - 6002:6002
+      - "8080:8080"
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Port=5432;Database=store;Username=postgres;Password=password
+    networks:
+      - dev
+
+volumes:
+  db-data:
