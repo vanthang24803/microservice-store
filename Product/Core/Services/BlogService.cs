@@ -55,6 +55,16 @@ namespace Product.Core.Services
 
         }
 
+        public async Task<List<Blog>> GetBlogByAuthorAsync(Guid authorId)
+        {
+            var blogs = await _context.Blogs
+                .Where(b => b.AuthorId == authorId.ToString())
+                .OrderByDescending(n => n.CreateAt)
+                .ToListAsync();
+
+            return blogs;
+        }
+
         public async Task<List<Blog>> GetBlogsAsync()
         {
             return await _context.Blogs.OrderByDescending(n => n.CreateAt).ToListAsync();

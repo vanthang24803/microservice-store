@@ -15,6 +15,20 @@ namespace Product.Controllers
             _blogService = blogService;
         }
 
+        [HttpGet]
+        [Route("author/{id}")]
+
+        public async Task<IActionResult> GetBlogByAuthor(Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _blogService.GetBlogByAuthorAsync(id);
+
+            return Ok(result);
+        }
+
         [HttpPut]
         [Route("{id}")]
 

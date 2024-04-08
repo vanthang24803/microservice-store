@@ -14,6 +14,8 @@ namespace Product.Core.Interfaces
 
         Task<List<Blog>> GetBlogsAsync();
 
+        Task<List<Blog>> GetBlogByAuthorAsync(Guid authorId);
+
         Task<IResponse> DeleteAsync(Guid id);
     }
 }
