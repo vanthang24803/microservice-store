@@ -165,7 +165,6 @@ namespace Product.Core.Services
                                 .Select(g =>
                                     new { ProductId = g.Key, TotalQuantity = g.Sum(x => x.Quantity) })
                                 .OrderByDescending(x => x.TotalQuantity)
-                                .Take(10)
                                 .ToListAsync();
 
             foreach (var product in listTopSellingProducts)
