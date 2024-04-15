@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Product.Core.Dtos.Order;
 using Product.Core.Interfaces;
+using Product.Core.Utils;
 
 namespace Product.Controllers
 {
@@ -13,6 +14,21 @@ namespace Product.Controllers
         public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
+        }
+
+        [HttpGet]
+        [Route("selling")]
+        public async Task<IActionResult> GetTopUser([FromQuery] QueryObjectOrder query)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var users = await _orderService.FindListUserSelling(query);
+
+            return Ok(users);
+
         }
 
         [HttpPost]

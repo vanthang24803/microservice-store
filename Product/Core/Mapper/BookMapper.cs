@@ -39,6 +39,7 @@ namespace Product.Core.Mapper
                 Name = product.Name,
                 Brand = product.Brand,
                 Thumbnail = product.Thumbnail,
+                Sold = product.Sold,
                 Categories = product.Categories.Select(c => new CategoryDto
                 {
                     Id = c.Id,

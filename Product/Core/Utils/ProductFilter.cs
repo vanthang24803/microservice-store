@@ -43,6 +43,12 @@ namespace Product.Core.Utils
                 {
                     listProducts = listProducts.Where(s => s.Options.Any(cat => cat.Quantity > 0)).ToList();
                 }
+
+                if (query.Status == "Selling")
+                {
+                    listProducts = [.. listProducts.OrderByDescending(s => s.Sold)];
+                }
+
                 if (query.Status == "Inventory")
                 {
                     var sixMonthsAgo = DateTime.Now.AddMonths(-6);

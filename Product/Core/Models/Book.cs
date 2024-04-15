@@ -21,6 +21,8 @@ namespace Product.Core.Models
 
         public List<Reviews> Reviews { get; set; } = new List<Reviews>();
 
+        public int Sold { get; set; } = 0;
+
         public string Detail { get; set; } = string.Empty;
 
         public string Introduction { get; set; } = string.Empty;

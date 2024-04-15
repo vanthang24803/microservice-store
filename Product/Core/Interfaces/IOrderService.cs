@@ -1,6 +1,8 @@
+using Product.Core.Dtos.Auth;
 using Product.Core.Dtos.Order;
 using Product.Core.Dtos.Response;
 using Product.Core.Models;
+using Product.Core.Utils;
 
 namespace Product.Core.Interfaces
 {
@@ -12,6 +14,8 @@ namespace Product.Core.Interfaces
 
         Task<List<Order>> FindAllAsync();
         Task<List<Order>> FindUserOrderAsync(string id);
+
+        Task<List<UserDto>> FindListUserSelling(QueryObjectOrder query);
 
         Task<Order?> FindByIdAsync(string id);
         Task<IResponse> DeleteAsync(string id);

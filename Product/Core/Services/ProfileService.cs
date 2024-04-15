@@ -178,6 +178,7 @@ namespace Product.Core.Services
             string Rank = GetRank(totalUserPrice, rankMapping);
 
 
+#pragma warning disable CS8601 // Possible null reference assignment.
             return new ProfileResponse()
             {
                 IsSucceed = true,
@@ -194,6 +195,7 @@ namespace Product.Core.Services
                     Role = [.. userRoles],
                 }
             };
+#pragma warning restore CS8601 // Possible null reference assignment.
         }
 
         private static string GetRank(double totalUserPrice, Dictionary<(double, double?), string> rankMapping)

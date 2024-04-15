@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Product.Core.Dtos.Category;
@@ -10,10 +11,16 @@ namespace Product.Core.Dtos.Book
 {
     public class BookDto
     {
+        [Required]
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Brand { get; set; }
-        public string Thumbnail { get; set; }
+        [Required]
+        public string Name { get; set; } = string.Empty;
+        [Required]
+        public string Brand { get; set; } = string.Empty;
+        [Required]
+        public string Thumbnail { get; set; } = string.Empty;
+        [Required]
+        public int Sold { get; set; } = 0;
         public List<CategoryDto> Categories { get; set; } = [];
         public List<OptionDto> Options { get; set; } = [];
         public List<ImageDto> Images { get; set; } = [];

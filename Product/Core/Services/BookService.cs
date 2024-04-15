@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Product.Context;
 using Product.Core.Dtos.Book;
+using Product.Core.Dtos.Response;
 using Product.Core.Interfaces;
 using Product.Core.Mapper;
 using Product.Core.Models;
 using Product.Core.Utils;
+using Product.Migrations;
 
 namespace Product.Core.Services
 {
@@ -185,6 +187,7 @@ namespace Product.Core.Services
             return topSellingBooks;
         }
 
+
         public async Task<ResponseDto> UpdateDetailAsync(Guid id, DetailDto detail)
         {
             var exitingBook = await _context.Books.FindAsync(id);
@@ -210,5 +213,7 @@ namespace Product.Core.Services
             };
 
         }
+
+
     }
 }

@@ -1,11 +1,14 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Product.Context;
+using Product.Core.Dtos.Auth;
 using Product.Core.Dtos.Order;
 using Product.Core.Dtos.Response;
 using Product.Core.Interfaces;
 using Product.Core.Mapper;
 using Product.Core.Models;
 using Product.Core.Utils;
+using Product.Migrations;
 
 namespace Product.Core.Services
 {
@@ -15,11 +18,14 @@ namespace Product.Core.Services
 
         private readonly IMailService _mailService;
 
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OrderService(ApplicationDbContext context, IMailService mailService)
+
+        public OrderService(ApplicationDbContext context, IMailService mailService, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _mailService = mailService;
+            _userManager = userManager;
         }
 
 
@@ -44,6 +50,7 @@ namespace Product.Core.Services
             {
                 var book = await _context.Books.FindAsync(Guid.Parse(product.ProductId));
 
+
                 if (book is null)
                 {
                     return new ResponseDto()
@@ -52,6 +59,8 @@ namespace Product.Core.Services
                         Message = "Book not found"
                     };
                 }
+
+                book.Sold += product.Quantity;
 
                 var option = await _context.Options.FindAsync(Guid.Parse(product.OptionId));
 
@@ -140,6 +149,30 @@ namespace Product.Core.Services
             }
 
             return result;
+        }
+
+        public async Task<List<UserDto>> FindListUserSelling(QueryObjectOrder query)
+        {
+            var orders = await _context.Orders.AsQueryable().ToListAsync();
+
+            var filter = new OrderUserFilter();
+            var users = filter.ApplyFilters(orders, query);
+
+            List<UserDto> usersSelling = [];
+
+            foreach (var user in users)
+            {
+                var exitingUser = await _userManager.FindByIdAsync(user.UserId);
+
+                if (exitingUser != null)
+                {
+                    var result = UserMapper.MapToDto(exitingUser, user.TotalOrder, (int)user.TotalPrice);
+
+                    usersSelling.Add(result);
+                }
+            }
+
+            return usersSelling;
         }
 
         public async Task<List<Order>> FindUserOrderAsync(string userId)
