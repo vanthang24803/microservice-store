@@ -1,17 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Product.Core.Dtos.Book
 {
     public class UpdateBookDto
     {
-        public string Name { get; set; }
+        [Required]
+        public string Name { get; set; } = string.Empty;
 
-        public string Brand { get; set; }
+        [Required]
+        public string Brand { get; set; } = string.Empty;
 
-        public string Thumbnail { get; set; }
+        [Required]
+        public string Thumbnail { get; set; } = string.Empty;
 
         public DateTime UpdateAt { get; set; } = DateTime.UtcNow;
     }
