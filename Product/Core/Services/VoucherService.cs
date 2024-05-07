@@ -138,11 +138,6 @@ namespace Product.Core.Services
                 return null;
             }
 
-            if (exitingVoucher.ShelfLife <= DateTime.Now)
-            {
-                return null;
-            }
-
             return exitingVoucher;
         }
 

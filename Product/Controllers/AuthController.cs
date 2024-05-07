@@ -149,26 +149,31 @@ namespace Product.Controllers
 
         }
 
+
         [HttpPost]
-        [Route("google")]
+        [Route("social")]
+
         public async Task<IActionResult> SignInWithGoogle([FromQuery] string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtToken = tokenHandler.ReadJwtToken(token);
 
-            var user = GoogleUntil.CreateFromJwtToken(jwtToken);
-
+            var user = new SocialRequest()
             {
-                var message = await _authService.SignInWithGoogleAsync(user);
+                Email = jwtToken.Payload.Claims.First(c => c.Type == "email").Value,
+                Name = jwtToken.Payload.Claims.First(c => c.Type == "name").Value,
+                Avatar = jwtToken.Payload.Claims.First(c => c.Type == "picture").Value,
 
-                if (!message.IsSucceed)
-                {
-                    return BadRequest(message);
-                }
+            };
 
-                return Ok(message);
+            var result = await _authService.SocialSignInAsync(user);
 
+            if (!result.IsSucceed)
+            {
+                return BadRequest(result);
             }
+
+            return Ok(result);
         }
 
 

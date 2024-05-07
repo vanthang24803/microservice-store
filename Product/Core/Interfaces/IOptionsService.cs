@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Product.Core.Dtos.Option;
 using Product.Core.Models;
 

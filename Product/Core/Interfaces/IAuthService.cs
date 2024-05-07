@@ -17,7 +17,7 @@ namespace Product.Core.Interfaces
         Task<ResponseDto> MakeAdminAsync(UpdatePermissionDto updatePermissionDto);
         Task<ResponseDto> MakeManagerAsync(UpdatePermissionDto updatePermissionDto);
 
-        Task<IResponse> SignInWithGoogleAsync(GoogleResponse googleResponse);
+        Task<IResponse> SocialSignInAsync(SocialRequest socialRequest);
 
         Task<IResponse> VerifyAccountAsync(string userId, string token);
 

@@ -337,20 +337,27 @@ namespace Product.Core.Services
             };
         }
 
-        public async Task<IResponse> SignInWithGoogleAsync(GoogleResponse googleResponse)
+        public async Task<bool> IsExistsUserById(string id)
         {
-            var user = await _userManager.FindByNameAsync(googleResponse.Email);
+            var existingUser = await _userManager.FindByIdAsync(id);
+
+            return existingUser != null;
+
+        }
+
+        public async Task<IResponse> SocialSignInAsync(SocialRequest socialRequest)
+        {
+            var user = await _userManager.FindByNameAsync(socialRequest.Email);
 
             if (user is null)
             {
                 ApplicationUser newUser = new ApplicationUser()
                 {
-                    FirstName = googleResponse.FirstName,
-                    LastName = googleResponse.LastName,
-                    Email = googleResponse.Email,
-                    UserName = googleResponse.Email,
                     SecurityStamp = Guid.NewGuid().ToString(),
-                    Avatar = googleResponse.Avatar,
+                    LastName = socialRequest.Name,
+                    Email = socialRequest.Email,
+                    UserName = socialRequest.Email,
+                    Avatar = socialRequest.Avatar,
                     EmailConfirmed = true,
                 };
 
@@ -444,14 +451,6 @@ namespace Product.Core.Services
                     }
                 };
             }
-        }
-
-        public async Task<bool> IsExistsUserById(string id)
-        {
-            var existingUser = await _userManager.FindByIdAsync(id);
-
-            return existingUser != null;
-
         }
     }
 }

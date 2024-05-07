@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Product.Context;
-using Product.Core.Dtos.Category;
 using Product.Core.Interfaces;
-using Product.Core.Models;
 
 namespace Product.Core.Services
 {
