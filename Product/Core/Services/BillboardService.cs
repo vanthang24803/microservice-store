@@ -1,128 +1,48 @@
-using Microsoft.EntityFrameworkCore;
-using Product.Context;
-using Product.Core.Dtos.Billboard;
+using System.Net;
+using Product.Core.Common.Utils;
+using Product.Core.Domain.Dtos.Billboard;
 using Product.Core.Interfaces;
 using Product.Core.Models;
+using Product.Core.Repositories;
 
 namespace Product.Core.Services
 {
     public class BillboardService : IBillboardService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IBillboardRepository _billboardRepository;
 
-        private readonly IUploadService _upload;
-
-        public BillboardService(ApplicationDbContext context, IUploadService upload)
+        public BillboardService(IBillboardRepository billboardRepository)
         {
-            _context = context;
-            _upload = upload;
+            _billboardRepository = billboardRepository;
         }
-        public async Task<ResponseDto> CreateAsync(CreateBillboard createBillboard, IFormFile file)
+        public async Task<Response<Billboard>> CreateAsync(BillboardDto createBillboard, IFormFile file)
         {
 
-            var result = await _upload.AddPhotoAsync(file);
+            var result = await _billboardRepository.Save(createBillboard, file);
 
-            if (result.Error != null)
-            {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = result.Error.Message
-                };
-            }
-
-            var Billboard = new Billboard
-            {
-                Thumbnail = result.SecureUrl.AbsoluteUri,
-                Url = createBillboard.Url,
-            };
-
-            _context.Billboards.Add(Billboard);
-
-            await _context.SaveChangesAsync();
-
-            return new ResponseDto()
-            {
-                IsSucceed = true,
-                Message = "Billboard created successfully!"
-            };
+            return new Response<Billboard>(HttpStatusCode.Created, result);
         }
 
-        public async Task<ResponseDto> DeleteAsync(Guid id)
+        public async Task<string> DeleteAsync(Guid id)
         {
-            var exitingBillboard = await _context.Billboards.FindAsync(id);
-            if (exitingBillboard is null)
-            {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Billboard not found!"
-                };
-            }
-
-            _context.Billboards.Remove(exitingBillboard);
-
-            await _context.SaveChangesAsync();
-
-            return new ResponseDto()
-            {
-                IsSucceed = true,
-                Message = "Billboard deleted successfully!"
-            };
+            return await _billboardRepository.Delete(id);
         }
 
         public async Task<List<Billboard>> GetAsync()
         {
-            return await _context.Billboards.ToListAsync();
+            return await _billboardRepository.FindAll();
         }
 
-        public async Task<Billboard?> GetDetailAsync(Guid id)
+        public async Task<Billboard> GetDetailAsync(Guid id)
         {
-            var exitingBillboard = await _context.Billboards.FindAsync(id);
-
-            if (exitingBillboard is null)
-            {
-                return null;
-            }
-
-            return exitingBillboard;
-
+            return await _billboardRepository.FindDetail(id);
         }
 
-        public async Task<ResponseDto> UpdateAsync(Guid id, UpdateBillboard updateBillboard, IFormFile file)
+        public async Task<Response<Billboard>> UpdateAsync(Guid id, BillboardDto updateBillboard, IFormFile file)
         {
-            var exitingBillboard = await _context.Billboards.FindAsync(id);
-            if (exitingBillboard is null)
-            {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Billboard not found!"
-                };
-            }
+            var result = await _billboardRepository.Update(id, updateBillboard, file);
 
-            var result = await _upload.AddPhotoAsync(file);
-
-            if (result.Error != null)
-            {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = result.Error.Message
-                };
-            }
-
-            exitingBillboard.Url = updateBillboard.Url;
-            exitingBillboard.Thumbnail = result.SecureUrl.AbsoluteUri;
-            exitingBillboard.UpdateAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-
-            return new ResponseDto()
-            {
-                IsSucceed = true,
-                Message = "Billboard updated successfully!"
-            };
+            return new Response<Billboard>(HttpStatusCode.Created, result);
 
         }
     }

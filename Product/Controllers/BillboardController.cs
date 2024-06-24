@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-using Product.Core.Dtos.Billboard;
+using Product.Core.Common.Validations;
+using Product.Core.Domain.Dtos.Billboard;
 using Product.Core.Interfaces;
 
 namespace Product.Controllers
 {
     [ApiController]
     [Route("api/product/billboard")]
+    [ValidateModelState]
     public class BillboardController : ControllerBase
     {
         private readonly IBillboardService _billboardService;
@@ -17,31 +19,17 @@ namespace Product.Controllers
 
         [HttpPost]
 
-        public async Task<IActionResult> CreateBillboard([FromForm] CreateBillboard createBillboard, [FromForm] IFormFile file)
+        public async Task<IActionResult> CreateBillboard([FromForm] BillboardDto createBillboard, [FromForm] IFormFile file)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
-            var result = await _billboardService.CreateAsync(createBillboard, file);
+            return Ok(await _billboardService.CreateAsync(createBillboard, file));
 
-            if (result.IsSucceed)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
         }
 
         [HttpGet]
 
         public async Task<IActionResult> GetBillboards()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             var result = await _billboardService.GetAsync();
 
@@ -51,21 +39,10 @@ namespace Product.Controllers
         [HttpPut]
         [Route("{id}")]
 
-        public async Task<IActionResult> UpdateBillboard([FromRoute] Guid id, [FromForm] UpdateBillboard updateBillboard, [FromForm] IFormFile file)
+        public async Task<IActionResult> UpdateBillboard([FromRoute] Guid id, [FromForm] BillboardDto updateBillboard, [FromForm] IFormFile file)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
-            var result = await _billboardService.UpdateAsync(id, updateBillboard, file);
-
-            if (result.IsSucceed)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
+            return Ok(await _billboardService.UpdateAsync(id, updateBillboard, file));
         }
 
 
@@ -74,19 +51,8 @@ namespace Product.Controllers
 
         public async Task<IActionResult> DeleteBillboard([FromRoute] Guid id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
-            var result = await _billboardService.DeleteAsync(id);
-
-            if (result.IsSucceed)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
+            return Ok(await _billboardService.DeleteAsync(id));
         }
 
 
@@ -95,19 +61,8 @@ namespace Product.Controllers
 
         public async Task<IActionResult> GetDetailBillboard([FromRoute] Guid id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
-            var result = await _billboardService.GetDetailAsync(id);
-
-            if (result is null)
-            {
-                return NotFound("Billboard not found");
-            }
-
-            return Ok(result);
+            return Ok(await _billboardService.GetDetailAsync(id));
 
         }
     }
