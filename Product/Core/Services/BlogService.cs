@@ -1,10 +1,11 @@
+using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Product.Context;
+using Product.Core.Common.Utils;
 using Product.Core.Dtos.Blogs;
-using Product.Core.Dtos.Response;
 using Product.Core.Interfaces;
-using Product.Core.Mapper;
 using Product.Core.Models;
+using Product.Core.Repositories;
 
 namespace Product.Core.Services
 {
@@ -12,57 +13,29 @@ namespace Product.Core.Services
     {
         private readonly ApplicationDbContext _context;
 
-        public BlogService(ApplicationDbContext context)
+        private readonly IBlogRepository _blogRepository;
+
+        public BlogService(ApplicationDbContext context, IBlogRepository blogRepository)
         {
             _context = context;
+            _blogRepository = blogRepository;
         }
 
-        public async Task<IResponse> CreateAsync(BlogDto blogDto)
+        public async Task<Response<Blog>> CreateAsync(BlogDto blogDto)
         {
-            var newBlog = BlogMapper.MapFromDto(blogDto);
-
-            _context.Blogs.Add(newBlog);
-            await _context.SaveChangesAsync();
-
-            return new ResponseDto()
-            {
-                IsSucceed = true,
-                Message = "Blog created successfully!"
-            };
+            var result = await _blogRepository.Save(blogDto);
+            return new Response<Blog>(HttpStatusCode.Created, result);
         }
 
-        public async Task<IResponse> DeleteAsync(Guid id)
+        public async Task<string> DeleteAsync(Guid id)
         {
-            var existingBlog = await _context.Blogs.FindAsync(id);
 
-            if (existingBlog == null)
-            {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Blog not found"
-                };
-            }
-
-            _context.Blogs.Remove(existingBlog);
-            await _context.SaveChangesAsync();
-
-            return new ResponseDto()
-            {
-                IsSucceed = true,
-                Message = "Blog deleted successfully"
-            };
-
+            return await _blogRepository.Delete(id);
         }
 
         public async Task<List<Blog>> GetBlogByAuthorAsync(Guid authorId)
         {
-            var blogs = await _context.Blogs
-                .Where(b => b.AuthorId == authorId.ToString())
-                .OrderByDescending(n => n.CreateAt)
-                .ToListAsync();
-
-            return blogs;
+            return await _blogRepository.GetAllBlogs();
         }
 
         public async Task<List<Blog>> GetBlogsAsync()
@@ -70,46 +43,16 @@ namespace Product.Core.Services
             return await _context.Blogs.OrderByDescending(n => n.CreateAt).ToListAsync();
         }
 
-        public async Task<Blog?> GetDetailAsync(Guid id)
+        public async Task<Blog> GetDetailAsync(Guid id)
         {
-            var existingBlog = await _context.Blogs.FindAsync(id);
-
-
-            if (existingBlog == null)
-            {
-                return null;
-            }
-
-            return existingBlog;
-
+            return await _blogRepository.FindBlogById(id);
         }
 
-        public async Task<IResponse> UpdateAsync(Guid id, UpdateBlogDto blog)
+        public async Task<Response<Blog>> UpdateAsync(Guid id, UpdateBlogDto blog)
         {
-            var existingBlog = await _context.Blogs.FindAsync(id);
 
-            if (existingBlog == null)
-            {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Blog not found"
-                };
-            }
-
-            existingBlog.Title = blog.Title;
-            existingBlog.Content = blog.Content;
-            existingBlog.Thumbnail = blog.Thumbnail;
-            existingBlog.UpdateAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-
-            return new ResponseDto()
-            {
-                IsSucceed = true,
-                Message = "Blog updated successfully"
-            };
-
+            var result = await _blogRepository.Update(id, blog);
+            return new Response<Blog>(HttpStatusCode.OK, result);
         }
     }
 }

@@ -105,6 +105,7 @@ builder.Services.AddScoped<IBlogService, BlogService>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<ICategoryRepository , CategoryRepository>();
 builder.Services.AddScoped<IBillboardRepository, BillboardRepository>();
+builder.Services.AddScoped<IBlogRepository, BlogRepository>();
 
 // TODO: Config
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));

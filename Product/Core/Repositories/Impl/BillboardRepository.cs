@@ -75,8 +75,6 @@ namespace Product.Core.Repositories.Impl
             {
                 throw new BadRequestException(result.Error.Message);
             }
-
-
             exitingBillboard.Url = updateBillboard.Url;
             exitingBillboard.Thumbnail = result.SecureUrl.AbsoluteUri;
             exitingBillboard.UpdateAt = DateTime.UtcNow;
