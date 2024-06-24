@@ -1,12 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Product.Context;
 using Product.Core.Dtos.Book;
-using Product.Core.Dtos.Response;
 using Product.Core.Interfaces;
 using Product.Core.Mapper;
 using Product.Core.Models;
 using Product.Core.Utils;
-using Product.Migrations;
 
 namespace Product.Core.Services
 {

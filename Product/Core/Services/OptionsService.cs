@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Product.Context;
+using Product.Core.Common.Exceptions;
+using Product.Core.Common.Messages;
 using Product.Core.Dtos.Option;
 using Product.Core.Interfaces;
 using Product.Core.Mapper;
@@ -22,11 +24,7 @@ namespace Product.Core.Services
 
             if (existingProduct is null)
             {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Product not found"
-                };
+                throw new BadRequestException(message: ErrorMessage.PRODUCT_NOT_FOUND);
             }
 
             var result = OptionMapper.MapFromDto(createOptionsDto, productId);
@@ -48,11 +46,7 @@ namespace Product.Core.Services
 
             if (existingProduct is null)
             {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Product not found"
-                };
+                throw new BadRequestException(message: ErrorMessage.PRODUCT_NOT_FOUND);
             }
 
             var existingOption = await _context.Options.FindAsync(id);

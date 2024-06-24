@@ -7,7 +7,6 @@ namespace Product.Core.Mapper
     {
         public static UserDto MapToDto(ApplicationUser user, int totalOrder, int totalPrice)
         {
-#pragma warning disable CS8601 // Possible null reference assignment.
             return new UserDto
             {
                 Id = user.Id,
@@ -18,7 +17,6 @@ namespace Product.Core.Mapper
                 TotalOrder = totalOrder,
                 TotalPrice = totalPrice,
             };
-#pragma warning restore CS8601 // Possible null reference assignment.
         }
     }
 }

@@ -238,7 +238,6 @@ D:\WorkSpace\NET\microservice-store\Product\obj\Debug\net8.0\staticwebassets\msb
 D:\WorkSpace\NET\microservice-store\Product\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Product.props
 D:\WorkSpace\NET\microservice-store\Product\obj\Debug\net8.0\staticwebassets.pack.json
 D:\WorkSpace\NET\microservice-store\Product\obj\Debug\net8.0\scopedcss\bundle\Product.styles.css
-D:\WorkSpace\NET\microservice-store\Product\obj\Debug\net8.0\Product.csproj.CopyComplete
 D:\WorkSpace\NET\microservice-store\Product\obj\Debug\net8.0\Product.dll
 D:\WorkSpace\NET\microservice-store\Product\obj\Debug\net8.0\refint\Product.dll
 D:\WorkSpace\NET\microservice-store\Product\obj\Debug\net8.0\Product.pdb
@@ -376,3 +375,7 @@ D:\WorkSpace\NET\microservice-store\Product\bin\Debug\net8.0\Microsoft.Extension
 D:\WorkSpace\NET\microservice-store\Product\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
 D:\WorkSpace\NET\microservice-store\Product\bin\Debug\net8.0\MailKit.dll
 D:\WorkSpace\NET\microservice-store\Product\bin\Debug\net8.0\MimeKit.dll
+D:\WorkSpace\NET\microservice-store\Product\obj\Debug\net8.0\Product.csproj.Up2Date
+D:\WorkSpace\NET\microservice-store\Product\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\WorkSpace\NET\microservice-store\Product\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\WorkSpace\NET\microservice-store\Product\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll

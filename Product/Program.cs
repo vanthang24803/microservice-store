@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Product.Context;
+using Product.Core.Common.Middlewares;
 using Product.Core.Interfaces;
 using Product.Core.Models;
+using Product.Core.Repositories;
+using Product.Core.Repositories.Impl;
 using Product.Core.Services;
 using Product.Core.Utils;
 
@@ -48,7 +51,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.User.RequireUniqueEmail = true;
 });
 
-// JWT config
+// TODO: JWT config
 builder.Services
     .AddAuthentication(options =>
     {
@@ -66,10 +69,11 @@ builder.Services
             ValidateAudience = true,
             ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
             ValidAudience = builder.Configuration["JWT:ValidAudience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]!))
         };
     });
 
+// TODO : Service
 // Product
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IBookService, BookService>();
@@ -97,7 +101,11 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 // Blog
 builder.Services.AddScoped<IBlogService, BlogService>();
 
-// Config
+// TODO : Repository
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<ICategoryRepository , CategoryRepository>();
+
+// TODO: Config
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddScoped<IMailService, MailService>();
 
@@ -110,7 +118,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseCors("Normal");
 

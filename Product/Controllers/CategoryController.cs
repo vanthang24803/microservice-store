@@ -16,41 +16,28 @@ namespace Product.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto categoryDto)
+        public async Task<IActionResult> CreateCategory([FromBody] CategoryRequest categoryDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _categoryService.CreateAsync(categoryDto);
-
-            if (result.IsSucceed)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
-
+            return Ok(await _categoryService.CreateAsync(categoryDto));
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<ActionResult> DeleteCategory([FromRoute] Guid id)
+        public IActionResult DeleteCategory([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _categoryService.DeleteAsync(id);
+            return Ok(_categoryService.DeleteAsync(id));
 
-            if (result.IsSucceed)
-            {
-                return Ok(result);
-            }
 
-            return BadRequest(result);
         }
 
         [HttpGet]
@@ -88,21 +75,14 @@ namespace Product.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateCategory([FromRoute] Guid id, [FromBody] UpdateCategoryDto updateCategoryDto)
+        public async Task<IActionResult> UpdateCategory([FromRoute] Guid id, [FromBody] CategoryRequest updateCategoryDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _categoryService.UpdateAsync(id, updateCategoryDto);
-
-            if (result.IsSucceed)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
+            return Ok(await _categoryService.UpdateAsync(id, updateCategoryDto));
         }
     }
 }
