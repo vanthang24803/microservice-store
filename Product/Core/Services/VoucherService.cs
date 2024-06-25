@@ -1,213 +1,71 @@
-using Microsoft.EntityFrameworkCore;
-using Product.Context;
-using Product.Core.Dtos.Response;
+using System.Net;
+using Product.Core.Common.Utils;
 using Product.Core.Dtos.Voucher;
 using Product.Core.Interfaces;
-using Product.Core.Mapper;
 using Product.Core.Models;
+using Product.Core.Repositories;
 
 namespace Product.Core.Services
 {
     public class VoucherService : IVoucherService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IVoucherRepository _voucherRepository;
 
-        public VoucherService(ApplicationDbContext context)
+        public VoucherService(IVoucherRepository voucherRepository)
         {
-            _context = context;
+            _voucherRepository = voucherRepository;
         }
 
-        public async Task<ResponseDto> CheckVoucherExpiryAsync()
+        public async Task<string> CheckVoucherExpiryAsync()
         {
-            var vouchers = _context.Vouchers;
-
-            foreach (var voucher in vouchers)
-            {
-                voucher.Expire = voucher.ShelfLife <= DateTime.UtcNow;
-            }
-
-            await _context.SaveChangesAsync();
-
-            return new ResponseDto()
-            {
-                IsSucceed = true,
-                Message = "Check voucher successfully"
-            };
+            return await _voucherRepository.CheckVoucherExpiry();
         }
 
 
-        public async Task<ResponseDto> CreateAsync(CreateVoucher createVoucher)
+        public async Task<Response<Voucher>> CreateAsync(CreateVoucher createVoucher)
         {
-            var Voucher = VoucherMapper.MapFromDto(createVoucher);
+            var voucher = await _voucherRepository.Save(createVoucher);
 
-            _context.Vouchers.Add(Voucher);
-            await _context.SaveChangesAsync();
-
-            return new ResponseDto()
-            {
-                IsSucceed = true,
-                Message = "Voucher created successfully"
-            };
+            return new Response<Voucher>(HttpStatusCode.Created, voucher);
         }
 
-        public async Task<ResponseDto> DeleteAsync(Guid id)
+        public async Task<string> DeleteAsync(Guid id)
         {
-            var exitingVoucher = await _context.Vouchers.FindAsync(id);
-
-            if (exitingVoucher is null)
-            {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Voucher not found"
-                };
-            }
-
-            _context.Vouchers.Remove(exitingVoucher);
-
-            await _context.SaveChangesAsync();
-
-            return new ResponseDto()
-            {
-                IsSucceed = true,
-                Message = "Voucher deleted successfully"
-            };
+            return await _voucherRepository.Delete(id);
         }
 
-        public async Task<ResponseDto> ExtendAsync(Guid id, ExtendVoucher extendVoucher)
+        public async Task<Response<Voucher>> ExtendAsync(Guid id, ExtendVoucher extendVoucher)
         {
-            var exitingVoucher = await _context.Vouchers.FindAsync(id);
-
-            if (exitingVoucher is null)
-            {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Voucher not found"
-                };
-            }
-
-            exitingVoucher.Day = extendVoucher.Day;
-            exitingVoucher.ShelfLife = exitingVoucher.ShelfLife.AddDays(exitingVoucher.Day);
-
-            await _context.SaveChangesAsync();
-
-            return new ResponseDto()
-            {
-                IsSucceed = true,
-                Message = "Extend voucher successfully"
-            };
+            var exitingVoucher = await _voucherRepository.Extend(id, extendVoucher);
+            return new Response<Voucher>(HttpStatusCode.OK, exitingVoucher);
         }
 
-        public async Task<IResponse> FindVoucherByCodeAsync(VoucherRequest voucher)
+        public async Task<Response<Voucher>> FindVoucherByCodeAsync(VoucherRequest voucher)
         {
-            var exitingVoucher = await _context.Vouchers.FirstOrDefaultAsync(x => x.Code == voucher.Code);
-
-            if (exitingVoucher == null)
-            {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Voucher not found!"
-                };
-            }
-
-            if (exitingVoucher.ShelfLife <= DateTime.Now)
-            {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Voucher expired!"
-                };
-            }
-
-            return new VoucherResponse()
-            {
-                IsSucceed = true,
-                Voucher = exitingVoucher,
-            };
-
+            var exitingVoucher = await _voucherRepository.FindVoucherByCode(voucher);
+            return new Response<Voucher>(HttpStatusCode.OK, exitingVoucher);
         }
 
-        public async Task<Voucher?> FindVoucherById(Guid id)
+        public async Task<Voucher> FindVoucherByIdAsync(Guid id)
         {
-            var exitingVoucher = await _context.Vouchers.FindAsync(id);
-
-            if (exitingVoucher == null)
-            {
-                return null;
-            }
-
-            return exitingVoucher;
+            return await _voucherRepository.FindVoucherById(id);
         }
 
         public async Task<List<Voucher>> GetAsync()
         {
-            return await _context.Vouchers.ToListAsync();
+            return await _voucherRepository.FindAll();
         }
 
-        public async Task<ResponseDto> UpdateAsync(Guid id, UpdateVoucher updateVoucher)
+        public async Task<Response<Voucher>> UpdateAsync(Guid id, UpdateVoucher updateVoucher)
         {
-            var exitingVoucher = await _context.Vouchers.FindAsync(id);
+            var voucher = await _voucherRepository.Update(id, updateVoucher);
 
-            if (exitingVoucher is null)
-            {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Voucher not found"
-                };
-            }
-
-            exitingVoucher.Name = updateVoucher.Name;
-            exitingVoucher.Title = updateVoucher.Title;
-            exitingVoucher.Quantity = updateVoucher.Quantity;
-            exitingVoucher.Type = updateVoucher.Type;
-            exitingVoucher.Day = updateVoucher.Day;
-            exitingVoucher.ShelfLife = updateVoucher.ShelfLife;
-            exitingVoucher.Discount = updateVoucher.Discount;
-            exitingVoucher.UpdateAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-
-            return new ResponseDto()
-            {
-                IsSucceed = true,
-                Message = "Voucher updated successfully"
-            };
+            return new Response<Voucher>(HttpStatusCode.OK, voucher);
         }
 
-        public async Task<ResponseDto> UseAsync(UseVoucher useVoucher)
+        public async Task<string> UseAsync(UseVoucher useVoucher)
         {
-            var exitingVoucher = await _context.Vouchers.FirstOrDefaultAsync(c => c.Code == useVoucher.Code);
-
-            if (exitingVoucher is null)
-            {
-                return new ResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Voucher not found"
-                };
-            }
-
-            if (exitingVoucher.ShelfLife > DateTime.UtcNow && exitingVoucher.Quantity > 0)
-            {
-                exitingVoucher.Quantity -= 1;
-
-                await _context.SaveChangesAsync();
-
-                return new ResponseDto()
-                {
-                    IsSucceed = true,
-                    Message = "Voucher used successfully"
-                };
-            }
-
-            return new ResponseDto()
-            {
-                IsSucceed = false,
-                Message = "Voucher has expired or is out of stock"
-            };
+            return await _voucherRepository.Use(useVoucher);
         }
     }
 }

@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
+
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Product.Core.Dtos.Voucher
 {
@@ -10,6 +7,6 @@ namespace Product.Core.Dtos.Voucher
     {
         [Required(ErrorMessage = "Code is required")]
 
-        public string Code { get; set; }
+        public string Code { get; set; } = string.Empty;
     }
 }

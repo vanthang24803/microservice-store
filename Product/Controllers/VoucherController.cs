@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Product.Core.Common.Validations;
 using Product.Core.Dtos.Voucher;
 using Product.Core.Interfaces;
 
@@ -6,6 +7,7 @@ namespace Product.Controllers
 {
     [ApiController]
     [Route("api/product/voucher")]
+    [ValidateModelState]
     public class VoucherController : ControllerBase
     {
         private readonly IVoucherService _voucherService;
@@ -20,19 +22,7 @@ namespace Product.Controllers
 
         public async Task<IActionResult> FindVoucherById([FromRoute] Guid id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var result = await _voucherService.FindVoucherById(id);
-
-            if (result != null)
-            {
-                return Ok(result);
-            }
-
-            return NotFound("Voucher not found");
+            return Ok(await _voucherService.FindVoucherByIdAsync(id));
         }
 
         [HttpPost]
@@ -40,19 +30,7 @@ namespace Product.Controllers
 
         public async Task<IActionResult> FindVoucher([FromBody] VoucherRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var result = await _voucherService.FindVoucherByCodeAsync(request);
-
-            if (result.IsSucceed)
-            {
-                return Ok(result);
-            }
-
-            return NotFound(result);
+            return Ok(await _voucherService.FindVoucherByCodeAsync(request));
         }
 
 
@@ -60,28 +38,14 @@ namespace Product.Controllers
 
         public async Task<IActionResult> CreateVoucher([FromBody] CreateVoucher createVoucher)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var result = await _voucherService.CreateAsync(createVoucher);
-
-            if (result.IsSucceed)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
+            return Ok(await _voucherService.CreateAsync(createVoucher));
         }
 
         [HttpGet]
 
         public async Task<IActionResult> GetVoucher()
         {
-            var result = await _voucherService.GetAsync();
-
-            return Ok(result);
+            return Ok(await _voucherService.GetAsync());
         }
 
         [HttpPost]
@@ -89,19 +53,7 @@ namespace Product.Controllers
 
         public async Task<IActionResult> VerifyVoucher()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var result = await _voucherService.CheckVoucherExpiryAsync();
-
-            if (result.IsSucceed)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
+            return Ok(await _voucherService.CheckVoucherExpiryAsync());
         }
 
         [HttpPost]
@@ -109,20 +61,8 @@ namespace Product.Controllers
 
         public async Task<IActionResult> UseVoucher([FromBody] UseVoucher useVoucher)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            return Ok(await _voucherService.UseAsync(useVoucher));
 
-            var result = await _voucherService.UseAsync(useVoucher);
-
-
-            if (result.IsSucceed)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
         }
 
         [HttpPut]
@@ -130,20 +70,7 @@ namespace Product.Controllers
 
         public async Task<IActionResult> UpdateVoucher([FromRoute] Guid id, [FromBody] UpdateVoucher updateVoucher)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var result = await _voucherService.UpdateAsync(id, updateVoucher);
-
-
-            if (result.IsSucceed)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
+            return Ok(await _voucherService.UpdateAsync(id, updateVoucher));
         }
 
         [HttpPut]
@@ -152,20 +79,7 @@ namespace Product.Controllers
         public async Task<IActionResult> ExtendVoucher([FromRoute] Guid id, [FromBody] ExtendVoucher extendVoucher)
         {
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var result = await _voucherService.ExtendAsync(id, extendVoucher);
-
-
-            if (result.IsSucceed)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
+            return Ok(await _voucherService.ExtendAsync(id, extendVoucher));
         }
 
         [HttpDelete]
@@ -173,19 +87,7 @@ namespace Product.Controllers
 
         public async Task<IActionResult> DeleteVoucher([FromRoute] Guid id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var result = await _voucherService.DeleteAsync(id);
-
-            if (result.IsSucceed)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
+            return Ok(await _voucherService.DeleteAsync(id));
         }
     }
 }
